@@ -1,0 +1,27 @@
+{#- 푸터. 위 내비와 같은 자료(site.sections)를 쓰므로 갈래가 늘어도 두 곳을
+    고칠 일이 없다. 콜로폰은 이 사이트가 무엇으로 만들어졌는지 한 줄로 말한다 —
+    자기 도구로 자기 사이트를 짓는 것 자체가 그 도구에 대한 주장이다. #}
+{%- set ko = page.language == "ko" %}
+{%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
+<footer class="colophon">
+  <div class="colophon-in">
+    <nav class="colophon-nav" aria-label="{{ t("menu") }}">
+      {%- for s in site.sections %}
+      <a href="{{ s.url }}">{{ s.title }}</a>
+      {%- endfor %}
+      {%- if site.feed %}
+      <a href="{{ site.feed }}">{{ t("feed") }}</a>
+      {%- endif %}
+      <a href="{{ site.base_path }}/sitemap.xml">{{ t("sitemap") }}</a>
+      <a href="https://github.com/sqzer-x">GitHub</a>
+    </nav>
+
+    <p class="colophon-note">
+      {#- 링크는 이 사이트를 만든 도구의 랜딩으로 간다. 레포가 아니라 랜딩인 이유는
+          여기서 궁금해지는 것이 "그게 뭔데"이지 "코드 보여 줘"가 아니기 때문이다. #}
+      <a href="https://sqzass.sqzer.com">sqzass</a>
+      <span class="colophon-sep" aria-hidden="true">·</span>
+      <a href="{{ home }}">{{ site.title }}</a>
+    </p>
+  </div>
+</footer>

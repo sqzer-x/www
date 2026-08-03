@@ -1,0 +1,19 @@
+{#- 검색 팔레트. <dialog> 를 쓰므로 Escape, 백드롭 클릭, 포커스 트랩, 닫을 때
+    트리거로 포커스 되돌리기가 전부 플랫폼 동작이고 우리가 쓸 코드가 아니다.
+
+    색인 URL은 템플릿이 조립하지 않는다 — 파일 이름은 엔진이 아는 것이라,
+    손으로 만들면 검색을 끈 사이트에서 죽은 URL 이 된다. site.search 가 준다. #}
+<dialog id="search-dialog" class="palette" aria-label="{{ t("search_the_site") }}">
+  <form method="dialog" class="palette-form">
+    <div class="palette-head">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" class="palette-input" autocomplete="off" spellcheck="false"
+             placeholder="{{ t("search_hint") }}" aria-label="{{ t("search_the_site") }}">
+      <button class="palette-close" type="submit" aria-label="{{ t("close") }}">
+        <kbd>esc</kbd>
+      </button>
+    </div>
+    <ul class="palette-results" aria-label="{{ t("search_results") }}"></ul>
+    <p class="palette-status" role="status"></p>
+  </form>
+</dialog>

@@ -1,0 +1,36 @@
+{#- 원장. 왼쪽 고정폭 거터에 날짜, 오른쪽에 제목과 한 줄 설명.
+    hahwul 은 같은 목록을 세 곳에서 세 번 만들었다. 여기서는 매크로 하나로 두고
+    홈의 "최근 글"과 Posts 인덱스가 같은 것을 쓴다.
+
+    `limit` 이 0 이면 전부. `skip` 은 앞에서 몇 개를 건너뛸지 — 홈에서 맨 위
+    글을 큰 카드로 따로 내고 나머지를 이어 붙일 때 쓴다. minijinja 에 slice 가
+    있지만 0 을 "전부"로 해석해 주지는 않으므로 루프 안에서 센다. 조건이 한 곳에
+    모여 있는 편이 나중에 읽기 쉽다. #}
+{% macro ledger(children, limit, show_year, skip) %}
+<ol class="ledger">
+  {%- for c in children %}
+  {%- if loop.index > skip and (limit == 0 or loop.index <= skip + limit) %}
+  {#- 연도 구분행. `changed` 는 지난 값을 기억하므로 날짜 없는 항목이 섞여도
+      기억이 흐트러지지 않는다 — 날짜가 없으면 아예 부르지 않기 때문이다. #}
+  {%- if show_year and c.date and loop.changed(c.date.year) %}
+  <li class="ledger-year"><span aria-hidden="true">{{ c.date.year }}</span></li>
+  {%- endif %}
+  <li class="ledger-row">
+    <a class="ledger-link" href="{{ c.url }}">
+      {%- if c.date %}
+      <time class="ledger-date" datetime="{{ c.date.date }}">{% if c.date.month < 10 %}0{% endif %}{{ c.date.month }}.{% if c.date.day < 10 %}0{% endif %}{{ c.date.day }}</time>
+      {%- else %}
+      <span class="ledger-date" aria-hidden="true">—</span>
+      {%- endif %}
+      <span class="ledger-body">
+        <span class="ledger-title">{{ c.title }}</span>
+        {%- if c.description %}
+        <span class="ledger-desc">{{ c.description }}</span>
+        {%- endif %}
+      </span>
+    </a>
+  </li>
+  {%- endif %}
+  {%- endfor %}
+</ol>
+{% endmacro %}

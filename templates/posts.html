@@ -1,0 +1,21 @@
+{#- 글 목록. 섹션이 `sort_by = "date"` 라 최신순이고, 이제 목록 항목이 자기
+    날짜를 실어 오므로 그 순서의 근거가 화면에 보인다. #}
+{% extends "base.html" %}
+{% from "partials/ledger.html" import ledger %}
+
+{% block content %}
+<div class="wrap wrap-ledger">
+  <header class="page-head" data-reveal>
+    <h1 class="page-title">{{ page.title }}</h1>
+    {%- if page.description %}
+    <p class="page-lede">{{ page.description }}</p>
+    {%- endif %}
+  </header>
+
+  {%- if page.content %}
+  <div class="prose prose-intro">{{ page.content | safe }}</div>
+  {%- endif %}
+
+  {{ ledger(page.children, 0, true, 0) }}
+</div>
+{% endblock %}

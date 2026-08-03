@@ -1,0 +1,37 @@
+title            = "sqzer-x"
+description      = "Terminal tools, static site tooling, and offensive security utilities."
+base_url         = "https://sqzer.com"
+default_language = "en"
+
+[languages.en]
+name   = "English"
+weight = 1
+
+[languages.ko]
+name   = "한국어"
+weight = 2
+
+[build]
+output_dir = "public"
+drafts     = false
+
+[markdown]
+# 한국어 본문에서 `**강조**한다` 가 강조로 파싱되려면 켜져 있어야 한다.
+cjk_friendly_emphasis = true
+heading_anchors       = "right"
+
+# base16-ocean.dark 는 푸른빛 회색 계열이라 --bg(#0b0e12) 위에서 겉돌지 않는다.
+# 라이트는 코드 블록만 종이로 남는 편이 읽기 좋아 InspiredGitHub 를 쓴다.
+[highlight]
+theme_light = "InspiredGitHub"
+theme_dark  = "base16-ocean.dark"
+
+[assets]
+source_dir  = "static"
+fingerprint = true
+
+[nav]
+sort_by = "weight"
+
+[search]
+enabled = true

@@ -1,0 +1,46 @@
+# 템플릿이 공급하는 문자열. 본문은 content/ 에 있다.
+# 한쪽 언어에 키가 없으면 빌드 에러다 — 기본 언어로 떨어뜨리면 한국어 페이지에
+# 영어 라벨이 섞여 나가고, 그건 읽는 사람에게만 보이고 고치는 사람에게는 안 보인다.
+
+skip_to_content = "Skip to content"
+menu            = "Menu"
+close           = "Close"
+theme           = "Theme"
+search          = "Search"
+search_the_site = "Search the site"
+search_hint     = "Type to search"
+search_empty    = "Nothing matches that."
+search_results  = "Results"
+
+all_posts    = "All posts"
+all_projects = "All projects"
+writing      = "Writing"
+recent       = "Recent"
+selected     = "Selected"
+
+previous     = "Previous"
+next         = "Next"
+back         = "Back"
+published    = "Published"
+updated      = "Updated"
+on_this_page = "On this page"
+breadcrumb   = "You are here"
+home         = "Home"
+
+website      = "Website"
+source       = "Source"
+docs         = "Documentation"
+repository   = "Repository"
+status       = "Status"
+language     = "Language"
+archived     = "Archived"
+active       = "Active"
+
+copy         = "Copy"
+copied       = "Copied"
+
+feed         = "Feed"
+sitemap      = "Sitemap"
+
+not_found_title = "This page does not exist"
+not_found_body  = "The address is wrong, or the page moved without leaving a note. Everything on this site is one search away."

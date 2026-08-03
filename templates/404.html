@@ -1,0 +1,21 @@
+{#- 호스트가 이름으로 찾는 404. 페이지에 매이지 않은 템플릿이라 page.title 은
+    "404" 로 고정이고 번역도 자식도 없다 — 여기서 쓸 수 있는 건 t() 와 site 뿐이다.
+
+    길 잃은 사람에게 필요한 건 사과가 아니라 나가는 길이다. 그래서 갈래 링크를 준다. #}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="wrap wrap-read">
+  <header class="page-head">
+    <p class="eyebrow">404</p>
+    <h1 class="page-title">{{ t("not_found_title") }}</h1>
+    <p class="page-lede">{{ t("not_found_body") }}</p>
+  </header>
+
+  <nav class="btn-row" aria-label="{{ t("menu") }}">
+    {%- for s in site.sections %}
+    <a class="btn btn-ghost" href="{{ s.url }}">{{ s.title }}</a>
+    {%- endfor %}
+  </nav>
+</div>
+{% endblock %}

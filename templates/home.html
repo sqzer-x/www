@@ -1,0 +1,93 @@
+{#- 홈. 히어로 → 맨 위 글 한 편 → 최근 글 → 프로젝트.
+
+    루트의 page.children 은 최상위 섹션들이라 글 목록이 여기 없다. 대신
+    site.sections 를 돌면서 URL 로 갈래를 찾는다. 테스트나 필터를 쓰지 않고
+    문자열을 그대로 비교하는 이유는, 이 URL 을 만드는 규칙이 이미 home 에
+    있어서 새 규칙을 하나 더 두지 않아도 되기 때문이다.
+
+    카피는 전부 [extra] 에 있고 이 파일은 구조만 안다. 두 언어가 같은 키를
+    1:1 로 갖는다. #}
+{% extends "base.html" %}
+{% from "partials/ledger.html" import ledger %}
+{% from "partials/icons.html" import i_arrow %}
+
+{% block content %}
+{%- set ko = page.language == "ko" %}
+{%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
+
+<section class="hero-home">
+  <div class="wrap">
+    {%- if page.extra.hero_kicker %}
+    <p class="eyebrow" data-reveal>{{ page.extra.hero_kicker }}</p>
+    {%- endif %}
+    <h1 class="statement" data-reveal>{{ page.extra.hero_title }}</h1>
+    {%- if page.extra.hero_sub %}
+    <p class="statement-sub" data-reveal>{{ page.extra.hero_sub }}</p>
+    {%- endif %}
+    {%- if page.extra.hero_actions %}
+    <div class="btn-row" data-reveal>
+      {%- for a in page.extra.hero_actions %}
+      <a class="btn btn-{{ a.style }}" href="{{ a.url }}"><span>{{ a.label }}</span>{{ i_arrow() }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+{#- 글. 맨 위 한 편은 크게, 나머지는 원장으로. 같은 자료를 두 가지 크기로
+    보여 주는 것뿐이라 두 곳을 따로 관리하지 않는다. #}
+{%- for s in site.sections %}
+{%- if s.url == home ~ "posts/" and s.pages %}
+<section class="home-block wrap" data-reveal>
+  <div class="plate">
+    <h2 class="plate-label">{{ t("writing") }}</h2>
+    <span class="plate-rule" aria-hidden="true"></span>
+    <a class="plate-door" href="{{ s.url }}">{{ t("all_posts") }}{{ i_arrow() }}</a>
+  </div>
+
+  {%- for p in s.pages %}
+  {%- if loop.first %}
+  <a class="feature" href="{{ p.url }}">
+    {%- if p.date %}
+    <time class="feature-date" datetime="{{ p.date.date }}">{{ p.date.year }}.{% if p.date.month < 10 %}0{% endif %}{{ p.date.month }}.{% if p.date.day < 10 %}0{% endif %}{{ p.date.day }}</time>
+    {%- endif %}
+    <h3 class="feature-title">{{ p.title }}</h3>
+    {%- if p.description %}
+    <p class="feature-desc">{{ p.description }}</p>
+    {%- endif %}
+  </a>
+  {%- endif %}
+  {%- endfor %}
+
+  {{ ledger(s.pages, 4, false, 1) }}
+</section>
+{%- endif %}
+{%- endfor %}
+
+{#- 프로젝트. 여기서는 이름과 한 줄 설명만 낸다 — 배지와 링크는 목록이 실어
+    오지 않는 값이라, 홈에 두려면 카탈로그를 한 번 더 적어야 한다. 그건 두
+    곳이 어긋날 자리를 만드는 일이고, 그 값들이 궁금해진 사람은 어차피
+    Projects 로 간다. #}
+{%- for s in site.sections %}
+{%- if s.url == home ~ "projects/" and s.pages %}
+<section class="home-block wrap" data-reveal>
+  <div class="plate">
+    <h2 class="plate-label">{{ s.title }}</h2>
+    <span class="plate-rule" aria-hidden="true"></span>
+    <a class="plate-door" href="{{ s.url }}">{{ t("all_projects") }}{{ i_arrow() }}</a>
+  </div>
+
+  <div class="lattice">
+    {%- for p in s.pages %}
+    <a class="cell cell-link" href="{{ p.url }}">
+      <h3 class="cell-title">{{ p.title }}</h3>
+      {%- if p.description %}
+      <p class="cell-desc">{{ p.description }}</p>
+      {%- endif %}
+    </a>
+    {%- endfor %}
+  </div>
+</section>
+{%- endif %}
+{%- endfor %}
+{% endblock %}

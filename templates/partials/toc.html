@@ -1,0 +1,12 @@
+{#- 목차. page.toc_entries 는 항상 채워지고, 보일지 말지는 front matter 의 toc 가
+    정한다. 데이터와 의사를 갈라 두면 긴 글에서만 목차를 내는 판단을 템플릿이 할 수 있다. #}
+{% macro toc_list(entries) %}
+<ul>
+  {%- for e in entries %}
+  <li>
+    <a href="#{{ e.id }}">{{ e.title }}</a>
+    {%- if e.children %}{{ toc_list(e.children) }}{% endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{% endmacro %}

@@ -1,0 +1,46 @@
+# 템플릿이 공급하는 문자열. 본문은 content/ 에 있다.
+# 한쪽 언어에 키가 없으면 빌드 에러다 — 기본 언어로 떨어뜨리면 한국어 페이지에
+# 영어 라벨이 섞여 나가고, 그건 읽는 사람에게만 보이고 고치는 사람에게는 안 보인다.
+
+skip_to_content = "본문으로 건너뛰기"
+menu            = "메뉴"
+close           = "닫기"
+theme           = "테마"
+search          = "검색"
+search_the_site = "사이트 검색"
+search_hint     = "검색어를 입력하세요"
+search_empty    = "일치하는 것이 없습니다."
+search_results  = "검색 결과"
+
+all_posts    = "글 전체"
+all_projects = "프로젝트 전체"
+writing      = "글"
+recent       = "최근"
+selected     = "골라 둔 것"
+
+previous     = "이전"
+next         = "다음"
+back         = "돌아가기"
+published    = "발행"
+updated      = "갱신"
+on_this_page = "이 페이지"
+breadcrumb   = "현재 위치"
+home         = "홈"
+
+website      = "웹사이트"
+source       = "소스"
+docs         = "문서"
+repository   = "저장소"
+status       = "상태"
+language     = "언어"
+archived     = "보관됨"
+active       = "유지 중"
+
+copy         = "복사"
+copied       = "복사됨"
+
+feed         = "피드"
+sitemap      = "사이트맵"
+
+not_found_title = "이 페이지는 없습니다"
+not_found_body  = "주소가 틀렸거나, 페이지가 옮겨 가면서 안내를 남기지 않았습니다. 이 사이트에 있는 것은 전부 검색 한 번 거리에 있습니다."
