@@ -2,7 +2,11 @@
 title = "소개"
 description = "sqzer.com 뒤에 누가 있고 여기서 무엇을 만드는지."
 weight = 30
-template = "page.html"
+template = "about.html"
+
+[extra]
+portrait     = "images/profile.jpg"
+portrait_alt = "sqzer-x"
 
 # 이름, 소속, 사는 곳, 이력 같은 개인적인 세부는 일부러 비워 두었다.
 # 지어내는 것보다 없는 편이 낫고, 채우는 건 본인만 할 수 있다.

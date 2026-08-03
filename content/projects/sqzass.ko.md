@@ -13,6 +13,7 @@ lang     = "Rust"
 license  = "MIT"
 version  = "0.1.0"
 platform = "Linux · macOS"
+mark     = "images/projects/sqzass.png"
 logo     = ""
 
 actions = [

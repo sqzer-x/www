@@ -29,6 +29,13 @@
 <link rel="alternate" hreflang="{{ lang.code }}" href="{{ site.origin }}{{ lang.url }}">
 {%- endfor %}
 
+{#- 파비콘에는 CSS 가 닿지 않는다. 검은 선화는 어두운 탭에서 안 보이므로 흰 선
+    버전을 따로 준다. media 를 모르는 브라우저는 마지막 것을 쓰므로, 밝은 탭이
+    기본인 쪽을 뒤에 둔다. #}
+<link rel="icon" type="image/png" media="(prefers-color-scheme: dark)" href="{{ asset("images/favicon-dark.png") }}">
+<link rel="icon" type="image/png" href="{{ asset("images/favicon.png") }}">
+<link rel="apple-touch-icon" href="{{ asset("images/apple-touch-icon.png") }}">
+
 {#- 소셜 카드. sqzass 는 <head> 에 아무것도 넣지 않으므로 전부 우리 마크업이다.
     summary_large_image 는 이미지가 있을 때만 뜻이 있다 — 없이 선언하면 빈 상자가 나온다. #}
 <meta property="og:type" content="{{ "website" if page.is_section else "article" }}">
@@ -59,10 +66,13 @@
 
 <header class="masthead">
   <div class="masthead-in">
-    {#- 로고 이미지는 없다. 워드마크가 곧 마크다 — mono 700 에 음수 트래킹.
-        alt 를 비우지 않는 이유는 이게 이미지가 아니라 텍스트이기 때문이다. #}
+    {#- 마크는 <img> 가 아니라 CSS 마스크다. 원본이 투명 배경의 검은 선화라
+        그대로 넣으면 다크 배경에서 사라진다. 마스크로 두면 currentColor 를
+        타서 테마와 호버를 글자와 똑같이 따라간다.
+        aria-hidden 인 이유는 바로 옆 텍스트가 이미 같은 이름을 말하기 때문이다 —
+        여기 이름을 또 넣으면 스크린리더가 두 번 읽는다. #}
     <a class="brand" href="{{ home }}">
-      <span class="brand-mark" aria-hidden="true">$</span>
+      <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-name">{{ site.title }}</span>
     </a>
 

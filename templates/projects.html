@@ -29,12 +29,14 @@
   <section class="bento" aria-label="{{ t("selected") }}">
     {%- for p in page.extra.featured %}
     <article class="bento-card" data-reveal>
+      {#- 카드 그림은 세 갈래이고 상세 페이지의 메달리온과 같은 규칙이다.
+          커버 사진 → 마크(선화) → 이름. 뒤로 갈수록 조용해질 뿐 자리는 같다. #}
       <div class="bento-media">
         {%- if p.cover %}
         <img src="{{ asset(p.cover) }}" alt="" loading="lazy" decoding="async">
+        {%- elif p.mark %}
+        <span class="bento-mark" aria-hidden="true" style="--mark-src: url('/{{ p.mark }}')"></span>
         {%- else %}
-        {#- 커버가 없을 때 회색 상자를 놓지 않는다. 이름 자체가 그림이 된다 —
-            mono 로 크게 깔고 뒤로 물린다. 나중에 이미지를 넣으면 이게 물러난다. #}
         <span class="bento-glyph" aria-hidden="true">{{ p.name }}</span>
         {%- endif %}
       </div>

@@ -13,6 +13,7 @@ lang     = "Python"
 license  = ""
 version  = ""
 platform = "Linux"
+mark     = ""
 logo     = ""
 
 actions = [

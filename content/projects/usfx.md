@@ -13,6 +13,7 @@ lang     = "Python"
 license  = ""
 version  = "1.2.0"
 platform = "Cross-platform"
+mark     = ""
 logo     = ""
 
 actions = [

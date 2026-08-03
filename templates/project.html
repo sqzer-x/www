@@ -50,10 +50,17 @@
       {%- endif %}
     </div>
 
-    {#- 옆칸. 로고가 있으면 메달리온, 없으면 이름을 크게 깐다. 규격이 같아서
-        나중에 SVG 를 넣어도 레이아웃이 움직이지 않는다. #}
+    {#- 옆칸. 세 가지가 같은 규격의 액자 안에 들어간다.
+
+        `mark` 는 선화다. 마스크로 깔아 currentColor 를 타게 하므로 테마를
+        따라가고, 프로젝트마다 다른 원본 색이 페이지와 싸우지 않는다.
+        `logo` 는 색이 의미를 지는 그림이라 <img> 로 그대로 둔다.
+        둘 다 없으면 이름이 그 자리를 지킨다 — 나중에 그림을 넣어도 레이아웃이
+        움직이지 않는 이유가 이것이다. #}
     <div class="hero-aside" aria-hidden="true">
-      {%- if page.extra.logo %}
+      {%- if page.extra.mark %}
+      <span class="medallion medallion-mark" style="--mark-src: url('/{{ page.extra.mark }}')"></span>
+      {%- elif page.extra.logo %}
       <span class="medallion"><img src="{{ asset(page.extra.logo) }}" alt="" loading="eager" decoding="async"></span>
       {%- else %}
       <span class="medallion medallion-glyph">{{ page.title }}</span>

@@ -13,7 +13,8 @@ lang     = "Rust"
 license  = "Apache-2.0"
 version  = ""
 platform = "Linux"
-logo     = "images/projects/ommp.png"
+mark     = ""
+logo     = ""
 
 actions = [
   { label = "웹사이트", url = "https://ommp.sqzer.com",          style = "primary" },

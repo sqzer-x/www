@@ -13,6 +13,7 @@ lang     = "PowerShell"
 license  = ""
 version  = ""
 platform = "Windows"
+mark     = ""
 logo     = ""
 
 actions = [

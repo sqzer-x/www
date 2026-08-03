@@ -13,6 +13,7 @@ lang     = "JavaScript"
 license  = "GPL-3.0"
 version  = ""
 platform = "GNOME 45 · 46 · 47"
+mark     = ""
 logo     = ""
 
 actions = [

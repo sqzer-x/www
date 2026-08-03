@@ -205,9 +205,25 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
   font-weight: 700;
   letter-spacing: -0.03em;
 }
-/* 마크는 그림이 아니라 글자다 — 프롬프트 기호. 로고 파일이 없어도 성립하고
-   currentColor 를 타므로 테마를 따라간다. */
-.brand-mark { color: var(--live); }
+/* 마크는 잉크로 그린다. 원본이 투명 배경의 검은 선화라 <img> 로 넣으면 다크
+   배경에서 사라지는데, 마스크로 두면 배경색이 currentColor 가 되어 글자와 같이
+   변한다. 원본 비율 240:131 을 박아 두어 로딩 중에도 자리가 안 움직인다. */
+.brand-mark {
+  width: 1.6em;
+  aspect-ratio: 128 / 123;
+  flex: none;
+  align-self: center;
+  background-color: var(--live);
+  -webkit-mask: url("/images/mark.png") center / contain no-repeat;
+  mask: url("/images/mark.png") center / contain no-repeat;
+  transition: background-color var(--tr-ink);
+}
+.brand:hover .brand-mark { background-color: var(--ink); }
+/* 마스크를 모르는 브라우저에서는 색만 칠한 네모가 남는다. 워드마크가 이미
+   이름을 말하고 있으므로 마크를 지우는 편이 낫다. */
+@supports not ((mask: url("")) or (-webkit-mask: url(""))) {
+  .brand-mark { display: none; }
+}
 .brand-name { color: var(--ink); }
 
 .nav {
@@ -322,6 +338,37 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
   font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
   color: var(--ink-3);
+}
+
+/* 소개의 머리. 초상과 제목이 나란히 서고, 좁아지면 초상이 위로 간다.
+   align-items 가 end 인 이유는 제목의 베이스라인이 초상의 아래변에 맞아야
+   둘이 같은 바닥을 딛고 선 것으로 보이기 때문이다. */
+.about-head {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: end;
+}
+.about-intro { min-width: 0; }
+
+.portrait { margin: 0; }
+.portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  /* 사진의 주황 배경이 이 페이지에서 제일 센 색이다. 쉬는 동안 한 걸음 물러나
+     있다가 다가가면 제 색으로 돌아온다. */
+  filter: saturate(0.75) brightness(0.94);
+  transition: filter var(--tr-light);
+}
+.about-head:hover .portrait img { filter: none; }
+
+@media (max-width: 34rem) {
+  .about-head { grid-template-columns: minmax(0, 1fr); }
+  .portrait { max-width: 9rem; }
 }
 
 .crumbs { margin-bottom: 0.9rem; font-family: var(--mono); font-size: 0.75rem; }
@@ -631,9 +678,23 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
   overflow: hidden;
 }
 .bento-media img { width: 100%; height: 100%; object-fit: cover; }
-/* 이미지가 없으면 낮춘다. 워드마크 하나를 담자고 16:7 을 비워 두면 카드가
-   비어 있는 것으로 읽힌다. 이미지가 들어오면 원래 비율로 돌아온다. */
-.bento-media:not(:has(img)) { aspect-ratio: 16 / 4.5; }
+
+/* 선화 마크. 메달리온과 같은 방식이라 상세 페이지와 카드가 같은 그림을 같은
+   규칙으로 그린다. */
+.bento-mark {
+  width: 46%;
+  aspect-ratio: 1;
+  background-color: var(--ink-4);
+  -webkit-mask: var(--mark-src) center / contain no-repeat;
+  mask: var(--mark-src) center / contain no-repeat;
+  transition: background-color var(--tr-light);
+}
+.bento-card:hover .bento-mark { background-color: var(--ink-3); }
+
+/* 그림이 아무것도 없을 때만 낮춘다. 이름 하나를 담자고 16:7 을 비워 두면 카드가
+   비어 있는 것으로 읽힌다. 커버든 마크든 들어오면 원래 비율이고, 그래야 카드
+   여러 장의 본문이 같은 높이에서 시작한다. */
+.bento-media:not(:has(img)):not(:has(.bento-mark)) { aspect-ratio: 16 / 4.5; }
 
 .bento-glyph {
   font-family: var(--mono);
@@ -785,6 +846,21 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
   overflow: hidden;
 }
 .medallion img { width: 76%; height: 76%; object-fit: contain; }
+
+/* 선화 마크. 인라인으로 오는 것은 --mark-src 하나뿐이고 그건 장식이 아니라
+   데이터다 — 어떤 파일인지는 프로젝트마다 다르고, 어떻게 그릴지는 전부 여기 있다.
+   currentColor 를 타므로 테마를 따라가고, 원본이 무슨 색이든 페이지와 싸우지 않는다. */
+.medallion-mark::before {
+  content: "";
+  width: 76%;
+  height: 76%;
+  background-color: var(--ink-3);
+  -webkit-mask: var(--mark-src) center / contain no-repeat;
+  mask: var(--mark-src) center / contain no-repeat;
+  transition: background-color var(--tr-light);
+}
+.hero:hover .medallion-mark::before { background-color: var(--ink-2); }
+
 .medallion-glyph {
   font-family: var(--mono);
   font-weight: 700;
