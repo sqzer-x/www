@@ -798,6 +798,11 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
   .hero-aside { display: none; }
 }
 
+/* 브리프는 읽는 폭 안에 산다. 거기에 옆칸까지 넣으면 태그라인이 좁은 기둥으로
+   눌리고, 그 자리를 채우는 것은 로고도 아니고 이름을 흐리게 깐 사각형이다. */
+.project[data-tier="brief"] .hero { grid-template-columns: minmax(0, 1fr); }
+.project[data-tier="brief"] .hero-aside { display: none; }
+
 /* ---------- facts ---------- */
 
 /* 별 개수가 있던 자리. 확인할 수 있는 사실만 들어간다. */
@@ -1003,8 +1008,12 @@ main { display: block; padding-bottom: clamp(4rem, 10vw, 8rem); }
    한 줄이 68rem 이면 눈이 다음 줄의 첫 글자를 못 찾는다. */
 .project .prose, .prose-intro { max-width: 44rem; }
 
+/* 여백은 형제 사이에만 둔다. 초기화를 `.prose p` 같은 타입 셀렉터로 쓰면
+   특정성이 (0,1,1) 이라 (0,1,0) 인 아래 규칙을 이겨 버리고, 문단 사이 여백이
+   통째로 사라진다. 둘 다 (0,1,0) 으로 맞추고 순서로 결정한다. */
+.prose > * { margin: 0; }
 .prose > * + * { margin-top: 1.15rem; }
-.prose p { margin: 0; text-wrap: pretty; }
+.prose p { text-wrap: pretty; }
 
 .prose h2, .prose h3, .prose h4 {
   margin: 2.6rem 0 0;
