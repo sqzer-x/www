@@ -227,12 +227,11 @@
       if (done) now = rows.length - 1;
 
       if (now === at) return;
-      if (at >= 0) {
-        rows[at].label.removeAttribute("aria-current");
-        rows[at].fill.classList.remove("is-now");
-      }
+      /* 눈금에는 표시를 따로 안 단다. 지금 절은 이 열에서 유일하게 덜 찬 칸이고,
+         그게 이미 표시다. 이름에는 aria-current 가 붙는다 — 보조기술이 읽는 것도
+         그것이고, 색은 거기서 나온다. */
+      if (at >= 0) rows[at].label.removeAttribute("aria-current");
       rows[now].label.setAttribute("aria-current", "true");
-      rows[now].fill.classList.add("is-now");
       at = now;
     }
 
