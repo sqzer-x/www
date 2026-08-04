@@ -276,6 +276,9 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   padding: 0; border: 0; background: none; cursor: pointer;
   font: inherit; font-size: 0.7rem; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink-3);
+  /* 좁은 화면에서 "한국어"가 세 줄로 쪼개져 마스트헤드 높이를 밀어 올린다.
+     컨트롤 라벨은 낱말 하나이고, 낱말 하나는 줄바꿈하지 않는다. */
+  white-space: nowrap;
   transition: color var(--tr-ink);
 }
 .chip:hover { color: var(--ink); }
@@ -300,9 +303,30 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 :root[data-theme="light"] .i-sun { display: none; }
 :root[data-theme="light"] .i-moon { display: inline; }
 
+.chip-word { display: none; }
+
 @media (max-width: 46rem) {
   .brand-name { display: none; }
+  /* 키캡은 키보드가 있을 때의 안내다. 없는 화면에서는 낱말이 대신 선다. */
   .chip kbd { display: none; }
+  .chip-word { display: inline; }
+  .chip-search { min-width: 0; }
+  /* 가운데 축을 포기한다. 양옆을 1fr 로 묶어 두면 넓은 쪽(도구 열)의 폭이
+     좁은 쪽에도 강제되고, 그 낭비만큼 내비가 잘려 나간다. 축보다 다 보이는
+     게 낫다 — 축은 읽는 자리를 정하지만 잘린 라벨은 길을 지운다. */
+  .masthead-in { grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.9rem; }
+  .nav { gap: 1rem; }
+}
+
+/* 손안의 화면에서는 마스트헤드에 들어갈 자리가 모자란다. 나가는 것은 GitHub 다 —
+   콜로폰에 같은 링크가 있고, 여기 남는 넷(갈래 셋과 검색)은 이 사이트 안을
+   도는 데 필요한 전부다. 잘린 라벨을 남기느니 중복을 하나 뺀다. */
+@media (max-width: 34rem) {
+  .chip-github { display: none; }
+  .masthead-in { gap: 0.75rem; }
+  /* 여기서부터 내비는 밀어서 본다. 가운데 정렬로 두면 넘칠 때 왼쪽으로 흘러나간
+     부분에 손이 닿지 않는다 — 스크롤은 오른쪽으로만 되기 때문이다. */
+  .nav { gap: 0.85rem; justify-content: flex-start; }
 }
 
 /* ---------- page head: 가운데 축 ---------- */
@@ -333,6 +357,12 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   letter-spacing: var(--track-air);
   line-height: 1.14;
   text-wrap: balance;
+}
+/* 이름 앞의 마크는 글자다. inline-grid 라 제목이 줄바꿈될 때 같이 흐르고,
+   em 단위라 등급에 따라 제목이 작아지면 마크도 따라 작아진다. */
+.page-title .chip-mark {
+  display: inline-grid; width: 1.05em; height: 1.05em;
+  vertical-align: -0.16em; margin-right: 0.34em;
 }
 
 .page-lede {
@@ -630,8 +660,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 }
 .ledger-year:first-child { margin-top: 0; }
 
-/* 행 사이에 선이 없다. 간격과 빛이 나눈다. */
-.ledger-link {
+/* 행 사이에 선이 없다. 간격과 빛이 나눈다.
+   프로젝트 페이지의 결정 목록(.register)이 같은 장치를 쓴다 — 좁은 표지 열과
+   넓은 본문 열. 한 규칙에 같이 두어야 한쪽 폭을 고칠 때 다른 쪽이 안 어긋난다. */
+.ledger-link, .register li {
   position: relative; display: grid;
   grid-template-columns: clamp(5rem, 11vw, 8rem) minmax(0, 1fr);
   align-items: baseline; gap: clamp(1rem, 2.5vw, 2rem);
@@ -665,7 +697,7 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 }
 
 @media (max-width: 40rem) {
-  .ledger-link { grid-template-columns: 1fr; gap: 0.5rem; padding-inline: 0; margin-inline: 0; }
+  .ledger-link, .register li { grid-template-columns: 1fr; gap: 0.5rem; padding-inline: 0; margin-inline: 0; }
 }
 
 /* 홈의 맨 위 글 — 액자와 같은 문법, 더 크게. */
@@ -703,113 +735,29 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .btn-text { border-color: transparent; padding-inline: 0.35rem; }
 .btn-text:hover { color: var(--accent); }
 
-.back {
-  display: inline-flex; align-items: center; gap: 0.45rem;
-  margin-top: 2rem;
-  font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-4);
-  transition: color var(--tr-ink);
-}
-.back:hover { color: var(--ink-2); }
-
 /* ---------- project detail ---------- */
 
-/* 프로젝트마다 자기 색조를 갖는다. 전역 --accent 를 이 페이지 안에서만
-   덮으므로 eyebrow 대시·특징 번호·링크·포커스가 한꺼번에 따라간다. 값이 없는
-   프로젝트는 인라인 style 이 아예 안 붙어서 사이트 기본값을 쓴다.
-   대비 범위는 좁게 잡는다 — 중간 명도, 낮은 채도. 니어블랙 위에서 읽히면서도
-   페이지를 자기 색으로 물들이지는 않는 띠다. */
+/* 프로젝트 한 장은 랜딩 페이지가 아니라 소프트웨어에 대한 문서다. 순서가 그렇게
+   말한다 — 명패, 펜스, 스펙, 주장, 영수증, 들어가는 길. 이 자리 전용으로 만든
+   부품은 없다: .page-head, .fence, .prose, 원장 격자, .prose 의 표를 그대로
+   쓴다. 새 물건이 필요해지는 프로젝트가 나타나면 그때 만든다.
+
+   프로젝트마다 자기 색조를 갖는다. 전역 --accent 를 이 페이지 안에서만 덮으므로
+   링크·표지 번호·포커스가 한꺼번에 따라간다. 값이 없는 프로젝트는 인라인 style
+   이 아예 안 붙어서 사이트 기본값을 쓴다. 대비 범위는 좁게 잡는다 — 중간 명도,
+   낮은 채도. 바닥 위에서 읽히면서도 페이지를 자기 색으로 물들이지는 않는 띠다. */
 .project { padding-bottom: clamp(3rem, 8vw, 6rem); }
 
-/* 브리프는 읽는 폭 안에 살고 제목도 한 단계 작다. 등급 차이가 열 개수가
-   아니라 타이포로 보여야 한다 — 그러지 않으면 "같은 페이지, 더 짧은 것"이다. */
-.project[data-tier="brief"] .hero-name { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem); }
-.project[data-tier="brief"] .hero { border-bottom: 0; padding-bottom: clamp(1.5rem, 3vw, 2rem); }
+/* 등급 차이는 순서와 폭이다. 랜딩은 스펙을 먼저 놓고(자기를 설명하는 규격서다)
+   세션과 결정 목록에서 두 번 52rem 으로 벌어진다. 브리프는 글을 먼저 놓고
+   펜스부터 끝까지 읽는 폭 안에 있다 — 스펙이 각주로 뒤에 붙는 글이다.
+   폭이 등급을 말하므로 두 화면이면 세어 보지 않고도 어느 쪽인지 안다.
+   제목도 한 단계 작다. 그러지 않으면 "같은 페이지, 더 짧은 것"이다. */
+.project[data-tier="brief"] .page-title { font-size: clamp(1.7rem, 1.35rem + 1.4vw, 2.4rem); }
 
-.hero {
-  display: grid; grid-template-columns: 1.35fr 1fr;
-  gap: clamp(1.5rem, 5vw, 4rem); align-items: center;
-  padding-block: clamp(2rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem);
-  border-bottom: 1px solid var(--rule);
-}
-.hero-main { min-width: 0; }
-
-/* eyebrow 앞의 액센트 대시. 제품 명패의 시작을 표시한다. */
-.hero .eyebrow { display: flex; align-items: center; gap: 0.75rem; }
-.hero .eyebrow::before {
-  content: ""; width: 1.75rem; height: 1px; background: var(--accent); flex: none;
-}
-
-.hero-name {
-  display: flex; align-items: center; gap: 0.6rem; margin: 0;
-  font-size: clamp(2.6rem, 1.9rem + 2.6vw, 3.8rem);
-  font-weight: var(--w-display); letter-spacing: var(--track-air); line-height: 1.05;
-}
-.hero-name .chip-mark { width: 1.05em; height: 1.05em; }
-
-.hero-tagline { margin: 1.1rem 0 0; max-width: 46ch; color: var(--ink-2); text-wrap: pretty; }
-
-.badges { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
-.badges li {
-  font-family: var(--mono); font-size: 0.66rem;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4);
-}
-
-.hero .btn-row { justify-content: flex-start; }
-
-.hero-aside { display: grid; place-items: center; }
-.medallion {
-  display: grid; place-items: center;
-  width: min(100%, 20rem); aspect-ratio: 1;
-  border: 1px solid var(--rule); border-radius: var(--radius);
-  background: var(--bg-2); overflow: hidden;
-}
-.medallion img { width: 76%; height: 76%; object-fit: contain; }
-.medallion-mark::before {
-  content: ""; width: 72%; height: 72%;
-  background-color: var(--mark-ink);
-  -webkit-mask: var(--mark-src) center / contain no-repeat;
-  mask: var(--mark-src) center / contain no-repeat;
-}
-
-@media (max-width: 52rem) {
-  .hero { grid-template-columns: minmax(0, 1fr); text-align: center; }
-  .hero .eyebrow, .hero-name, .hero .btn-row { justify-content: center; }
-  .hero-tagline, .badges { margin-inline: auto; justify-content: center; }
-  /* 좁을 때 옆칸은 지우지 않고 위로 올린다. 지우면 그 프로젝트만 그림이 없는
-     것처럼 보인다. */
-  .hero-aside { order: -1; }
-  .medallion { width: min(60%, 13rem); }
-}
-
-/* ---------- facts ---------- */
-
-.facts {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  margin-block: clamp(2rem, 5vw, 3rem);
-  padding-block: clamp(1.5rem, 3vw, 2rem);
-  border-bottom: 1px solid var(--rule);
-}
-.fact {
-  flex: 1 1 9rem; display: flex; flex-direction: column; gap: 0.3rem;
-  align-items: center; text-align: center; padding-inline: 1rem;
-  border-left: 1px solid var(--rule);
-}
-.fact:first-child { border-left: 0; }
-.fact-value {
-  font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.9rem);
-  font-weight: var(--w-display); letter-spacing: 0.005em; line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.fact-label {
-  font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ink-4);
-}
-
-/* ---------- lattice ---------- */
-
-.block { padding-block: clamp(2.5rem, 6vw, 4rem); border-bottom: 1px solid var(--rule); }
-.block:last-child { border-bottom: 0; }
+/* 연 사이는 여백이 나눈다. 원장이 행 사이에 선을 안 긋는 것과 같은 이유다 —
+   선을 그으면 읽는 물건이 아니라 채워 넣은 표가 된다. */
+.block { padding-block: clamp(2.5rem, 6vw, 4rem); }
 .block-head { margin-bottom: clamp(1.75rem, 4vw, 2.5rem); text-align: center; }
 .block-title {
   margin: 0; font-size: clamp(1.5rem, 1.25rem + 1.1vw, 2.1rem);
@@ -817,59 +765,38 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 }
 .block-intro { margin: 0.8rem auto 0; max-width: 56ch; color: var(--ink-3); }
 
-/* 선은 음수 마진으로 겹친 1px 이다. 개수와 열수가 무엇이든 맞아 들어가고
-   :nth-child 규칙이 필요 없다. 20rem 은 임의값이 아니다 — 71rem 안에서 열이
-   3개가 되고, 특징을 여섯 개로 쓰면 두 줄이 정확히 찬다. */
-.lattice {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  border-top: 1px solid var(--rule);
-  border-left: 1px solid var(--rule);
-}
-.cell {
-  position: relative; isolation: isolate;
-  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1rem, 2vw, 1.5rem);
-  min-width: 0;
-  margin: 0 -1px -1px 0;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-/* hover 에서 위로 올린다. 그러지 않으면 이웃에 가려 두 변만 밝아진다. */
-.cell:hover { z-index: 1; border-color: var(--rule-2); }
-.cell { transition: border-color var(--tr-ink); }
+/* ---------- spec ---------- */
 
-.cell-index {
-  display: block; font-family: var(--mono); font-size: 0.66rem;
-  letter-spacing: 0.18em; color: var(--ink-4); margin-bottom: 0.7rem;
-  transition: color var(--tr-ink);
-}
-.cell:hover .cell-index { color: var(--accent); }
-.cell-title { margin: 0; font-size: 1rem; font-weight: var(--w-label); letter-spacing: var(--track-set); }
-.cell-desc { margin: 0.5rem 0 0; font-size: 0.86rem; color: var(--ink-3); text-wrap: pretty; }
+/* 배지 줄과 큰 숫자 띠를 대신한다. 같은 값을 세 번 찍던 자리였다 — 이름 위
+   eyebrow 에 한 번, 배지에 한 번, 숫자 띠에 한 번. 이제 한 번이다.
 
-/* ---------- terminal ---------- */
+   숫자를 46px 로 키우지 않는 이유: 이 프로젝트들의 별 개수는 0 이고, 0 을 그
+   크기로 세우면 그건 사실 전달이 아니라 프로젝트에 대한 진술이 된다. 같은 값도
+   `런타임 의존성 · 0` 이라는 한 줄에서는 바이너리에 대한 사실로 읽힌다.
 
+   표는 .prose 의 표와 같은 규칙을 쓴다. 이 집에서 키-값 표는 한 가지 물건이고,
+   한 곳에서 고치면 둘 다 따라와야 한다. 펜스 바로 아래 앉아 프런트매터처럼
+   읽히는 것도 의도다 — 이 사이트의 모든 페이지가 실제로 그렇게 생겼다. */
+/* 아래 여백은 다음 연을 밀어내는 것이다. 랜딩에서는 규격서 바로 뒤에 글이
+   오는데, 표의 마지막 행 선과 첫 문단이 붙으면 문단이 표의 일부로 읽힌다. */
+.spec { max-width: 34rem; margin: 1.75rem auto clamp(2.5rem, 6vw, 4rem); }
+.spec th { width: 42%; border-bottom-color: var(--rule); }
+.spec a { color: inherit; transition: color var(--tr-ink); }
+.spec a:hover { color: var(--accent); }
+
+/* ---------- session ---------- */
+
+/* 주장 하나에 영수증 하나. 창틀 — 신호등 점 세 개와 `zsh` 라벨 — 은 없앴다.
+   그건 터미널의 그림이고 여기 있는 것은 실제 출력이다. 상자는 이 사이트가
+   기계 출력에 이미 쓰는 그 상자(.prose pre)와 같은 재질이다. */
 .term {
-  border: 1px solid var(--rule-2); border-radius: var(--radius);
-  overflow: hidden; background: var(--bg-recess);
-  max-width: 52rem; margin-inline: auto;
-}
-.term-bar {
-  display: flex; align-items: center; gap: 0.7rem;
-  padding: 0.55rem 0.85rem;
-  border-bottom: 1px solid var(--rule); background: var(--bg-2);
-}
-.term-dots { display: inline-flex; gap: 0.32rem; }
-.term-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule-3); }
-.term-dots i:first-child { background: var(--ink-4); }
-.term-name { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ink-4); }
-
-.term-body {
-  margin: 0; padding: 1.2rem 1.3rem; overflow-x: auto;
+  max-width: 52rem; margin: 0 auto; padding: 1.2rem 1.3rem; overflow-x: auto;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--bg-recess);
   font-family: var(--mono); font-size: 0.8rem; line-height: 1.85; white-space: pre;
 }
-.term-body code { font: inherit; background: none; padding: 0; border: 0; }
-.term-body span { display: block; }
+.term code { font: inherit; background: none; padding: 0; border: 0; }
+.term span { display: block; }
 .term-cmd { color: var(--ink); }
 /* 주석은 기울이고, 출력은 중립 회색이다. 출력에 색을 주면 그게 결과가 아니라
    상태로 읽힌다. */
@@ -880,15 +807,35 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink-4);
 }
 
-/* ---------- cta ---------- */
+/* ---------- register ---------- */
 
-.cta { margin-top: clamp(3rem, 7vw, 5rem); padding-block: clamp(2.5rem, 6vw, 5rem); text-align: center; }
-.cta-inner { max-width: 46ch; margin-inline: auto; }
-.cta-title {
-  margin: 0; font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.4rem);
-  font-weight: var(--w-display); letter-spacing: var(--track-air); text-wrap: balance;
+/* 결정 목록. 원장과 같은 격자를 쓴다 — 좁은 표지 열, 넓은 본문 열, 행 사이에
+   선 없음. 다른 것은 표지가 날짜가 아니라 순번이고 행이 링크가 아니라는 것뿐이다.
+   번호가 남은 이유는 내용이 그걸 벌기 때문이다: 순서가 있는 여섯 개의 결정이고,
+   하나하나가 다른 데서 먼저 일어난 사고다. 순번은 저자가 적지 않는다 — 순서가
+   곧 번호이므로 루프가 만든다. */
+.register { list-style: none; margin: 0 auto; padding: 0; max-width: 52rem; }
+.register li { padding-inline: 0; margin-inline: 0; }
+.register-index {
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.12em; font-variant-numeric: tabular-nums; color: var(--ink-4);
 }
-.cta-text { margin: 0.9rem 0 0; color: var(--ink-3); }
+.register-title {
+  margin: 0; font-size: 1.0625rem;
+  font-weight: var(--w-item); letter-spacing: var(--track-set);
+}
+.register-body { margin: 0.4rem 0 0; max-width: 58ch; color: var(--ink-3); text-wrap: pretty; }
+
+/* ---------- closing ---------- */
+
+/* 닫는 줄. 띠도 제목도 두 번째 버튼 줄도 없다 — 한 문장과 그 문장이 가리키는
+   곳뿐이다. 채운 버튼과 유령 버튼 한 쌍은 페이지에 한 번, 머리에만 선다.
+   읽는 사람이 결정하는 자리가 거기이기 때문이다. */
+.closing { margin-top: clamp(2.5rem, 6vw, 4rem); text-align: center; }
+.closing p { max-width: 46ch; margin-inline: auto; color: var(--ink-3); }
+.closing .btn-row { margin-top: 1rem; }
+/* 주소는 낱말이 아니라 주소다. mono 로 두고 대문자로 만들지 않는다. */
+.closing .btn { font-family: var(--mono); font-size: 0.7rem; text-transform: none; letter-spacing: 0.03em; }
 
 /* ---------- about ---------- */
 
@@ -991,17 +938,19 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .copy-btn:hover { color: var(--ink); border-color: var(--rule-3); }
 .copy-btn.is-done { opacity: 1; color: var(--accent); border-color: var(--accent); }
 
-.prose table {
+/* 프로젝트 페이지의 스펙표(.spec)가 같은 규칙 위에 선다 — 키-값 표는 이 집에서
+   한 가지 물건이다. 따로 두면 한쪽만 고쳐지고 두 페이지가 서로 달라 보인다. */
+.prose table, .spec {
   width: 100%; margin-top: 1.75rem; border-collapse: collapse;
   font-size: 0.9rem; font-variant-numeric: tabular-nums;
 }
-.prose th, .prose td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--rule); }
-.prose th {
+.prose th, .prose td, .spec th, .spec td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--rule); }
+.prose th, .spec th {
   font-size: 0.64rem; font-weight: 500;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-4);
   border-bottom-color: var(--rule-2);
 }
-.prose td { color: var(--ink-2); }
+.prose td, .spec td { color: var(--ink-2); }
 .prose hr { margin-top: 2.5rem; border: 0; border-top: 1px solid var(--rule); }
 
 .prose .anchor { opacity: 0; color: var(--ink-4); text-decoration: none; transition: opacity var(--tr-ink); }
@@ -1085,13 +1034,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
    문 링크)은 두 언어에서 영어로 고정이므로 대문자와 자간을 그대로 둔다 —
    되돌리면 한국어 페이지에서만 라벨이 소문자로 나와 두 언어가 달라 보인다. */
 html[lang="ko"] .eyebrow,
-html[lang="ko"] .fact-label,
 html[lang="ko"] .prose th,
 html[lang="ko"] .crumbs,
 html[lang="ko"] .palette-crumb,
-html[lang="ko"] .btn,
-html[lang="ko"] .back,
-html[lang="ko"] .badges li {
+html[lang="ko"] .btn {
   font-family: var(--sans);
   letter-spacing: 0;
   text-transform: none;
@@ -1118,7 +1064,7 @@ html[lang="ko"] {
 html[lang="ko"] .ledger-date,
 html[lang="ko"] .feature-date,
 html[lang="ko"] .ledger-year,
-html[lang="ko"] .term-body,
+html[lang="ko"] .term,
 html[lang="ko"] .stars { font-family: var(--mono); }
 
 /* ---------- reduced motion ---------- */

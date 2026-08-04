@@ -1,147 +1,121 @@
-{#- 프로젝트 한 장. 두 등급뿐이다: 랜딩이거나 브리프거나. 중간 등급을 만들면
-    어느 프로젝트가 어디에 속하는지 매번 새로 판단해야 한다.
+{#- 프로젝트 한 장. 랜딩 페이지가 아니라 소프트웨어에 대한 문서다 — 명패,
+    프런트매터, 그다음 주장, 그다음 영수증, 그다음 들어가는 길.
 
-    등급은 `tier` 가 정하지만 블록의 유무는 데이터가 정한다 — features 가 []
-    면 그 섹션이 없다. 빈 배열이 이미 "없음"이라 플래그를 따로 두지 않는다.
+    등급은 둘뿐이다: 랜딩이거나 브리프거나. 중간 등급을 만들면 어느 프로젝트가
+    어디에 속하는지 매번 새로 판단해야 한다. 두 등급이 다른 것은 섹션 개수가
+    아니라 **순서와 폭**이다. 랜딩은 규격서를 먼저 놓고 글로 이어 가며 세션과
+    결정 목록에서 두 번 넓어진다. 브리프는 글이 먼저이고 규격서는 각주처럼 뒤에
+    붙으며 끝까지 읽는 폭 안에 있다. 그러면 읽는 사람이 섹션을 세지 않고도 두
+    화면 만에 어느 쪽인지 안다.
+
+    블록의 유무는 데이터가 정한다 — register 가 [] 면 그 섹션이 없다. 빈 배열이
+    이미 "없음"이라 플래그를 따로 두지 않는다.
 
     별 개수는 tools/stars.py 가 front matter 에 구워 둔 값이다. 렌더 중에
     네트워크를 부르면 재현되는 빌드가 아니게 되고, 브라우저에서 부르면 익명
-    API 한도(IP 당 60/시간)에 걸린다. 0 이어도 보여 준다 — 그게 사실이고,
-    없는 항목만 숫자가 빠지면 줄이 어긋난다. #}
+    API 한도(IP 당 60/시간)에 걸린다. 0 이어도 보여 준다 — 그게 사실이다.
+    저장소와 별 줄은 저자가 적지 않는다: repo 와 stars 스칼라에서 template 이
+    만든다. stars.py 가 고쳐 쓰는 것이 그 두 줄이라 한 곳에만 있어야 한다. #}
 {% extends "base.html" %}
-{% from "partials/icons.html" import i_out, i_arrow %}
+{% from "partials/icons.html" import i_out %}
+{% from "partials/spec.html" import spec, prose %}
 
 {% block content %}
-<div class="{{ "wrap" if page.extra.tier == "landing" else "wrap wrap-read" }} project" data-tier="{{ page.extra.tier }}"
+{%- set landing = page.extra.tier == "landing" %}
+<article class="{{ "wrap" if landing else "wrap wrap-read" }} project" data-tier="{{ page.extra.tier }}"
      {%- if page.extra.accent %} style="--accent: {{ page.extra.accent }}"{% endif %}>
 
-  {%- if page.section %}
-  <a class="back" href="{{ page.section.url }}">
-    <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6M11 6l-6 6 6 6"/></svg>
-    <span>{{ page.section.title }}</span>
-  </a>
-  {%- endif %}
-
-  <header class="hero">
-    <div class="hero-main">
-      {%- if page.extra.eyebrow %}
-      <p class="eyebrow">{{ page.extra.eyebrow }}</p>
-      {%- endif %}
-      {#- 이름 옆의 작은 마크가 명패의 시작이다. 없으면 이름만 선다. #}
-      <h1 class="hero-name">
-        {%- if page.extra.mark %}<span class="chip-mark" style="--mark-src: url('/{{ page.extra.mark }}')" aria-hidden="true"></span>
-        {%- elif page.extra.logo %}<span class="chip-mark" aria-hidden="true"><img src="{{ asset(page.extra.logo) }}" alt=""></span>
-        {%- endif %}
-        <span>{{ page.title }}</span>
-      </h1>
-      {%- if page.extra.tagline %}
-      <p class="hero-tagline">{{ page.extra.tagline }}</p>
-      {%- endif %}
-
-      <ul class="badges">
-        {%- if page.extra.lang %}<li>{{ page.extra.lang }}</li>{% endif %}
-        {%- if page.extra.license %}<li>{{ page.extra.license }}</li>{% endif %}
-        {%- if page.extra.version %}<li>{{ page.extra.version }}</li>{% endif %}
-        {%- if page.extra.platform %}<li>{{ page.extra.platform }}</li>{% endif %}
-        {%- if page.extra.repo %}<li class="stars">{{ page.extra.stars }} ★</li>{% endif %}
-      </ul>
-
-      {%- if page.extra.actions %}
-      <div class="btn-row">
-        {%- for a in page.extra.actions %}
-        <a class="btn btn-{{ a.style }}" href="{{ a.url }}"{% if a.url is startingwith "http" %} target="_blank" rel="noopener noreferrer"{% endif %}>
-          <span>{{ a.label }}</span>{{ i_out() }}
-        </a>
-        {%- endfor %}
-      </div>
-      {%- endif %}
-    </div>
-
-    {#- 옆칸은 규격이 하나다. 마크 → 로고 → "그림 없음". 좁은 화면에서는 지우지
-        않고 위로 올린다 — 지우면 그 프로젝트만 그림이 없는 것처럼 보인다. #}
-    <div class="hero-aside" aria-hidden="true">
-      {%- if page.extra.mark %}
-      <span class="medallion medallion-mark" style="--mark-src: url('/{{ page.extra.mark }}')"></span>
-      {%- elif page.extra.logo %}
-      <span class="medallion"><img src="{{ asset(page.extra.logo) }}" alt="" loading="eager" decoding="async"></span>
-      {%- else %}
-      <span class="medallion"><span class="noimg"></span></span>
-      {%- endif %}
-    </div>
-  </header>
-
-  {%- if page.extra.facts %}
-  <section class="facts">
-    {%- for f in page.extra.facts %}
-    <div class="fact">
-      <span class="fact-value">{{ f.value }}</span>
-      <span class="fact-label">{{ f.label }}</span>
-    </div>
-    {%- endfor %}
-  </section>
-  {%- endif %}
-
-  {%- if page.content %}
-  <div class="prose">{{ page.content | safe }}</div>
-  {%- endif %}
-
-  {%- if page.extra.features %}
-  <section class="block">
-    <header class="block-head">
-      {%- if page.extra.features_eyebrow %}<p class="eyebrow">{{ page.extra.features_eyebrow }}</p>{% endif %}
-      {%- if page.extra.features_title %}<h2 class="block-title">{{ page.extra.features_title }}</h2>{% endif %}
-      {%- if page.extra.features_intro %}<p class="block-intro">{{ page.extra.features_intro }}</p>{% endif %}
-    </header>
-    <div class="lattice">
-      {%- for f in page.extra.features %}
-      <article class="cell">
-        {#- 번호는 저자가 적지 않는다. 순서가 곧 번호이므로 루프가 만든다. #}
-        <span class="cell-index" aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
-        <h3 class="cell-title">{{ f.title }}</h3>
-        <p class="cell-desc">{{ f.desc }}</p>
-      </article>
+  <header class="page-head">
+    {%- if page.section %}
+    <nav class="crumbs" aria-label="{{ t("breadcrumb") }}">
+      <a href="{{ page.section.url }}">{{ page.section.title }}</a>
+    </nav>
+    {%- endif %}
+    {%- if page.extra.eyebrow %}
+    <p class="eyebrow">{{ page.extra.eyebrow }}</p>
+    {%- endif %}
+    {#- 이름 앞의 작은 마크가 명패의 시작이다. 없으면 이름만 선다 — 상세
+        페이지에는 채워야 할 자리가 없으므로 "그림 없음" 상자를 두지 않는다.
+        그 상자는 갤러리에서 한 칸을 메우는 물건이고, 여기서는 없는 것에
+        테두리를 둘러 없다고 말하는 꼴이 된다. #}
+    <h1 class="page-title">
+      {%- if page.extra.mark %}<span class="chip-mark" style="--mark-src: url('/{{ page.extra.mark }}')" aria-hidden="true"></span>
+      {%- elif page.extra.logo %}<span class="chip-mark" aria-hidden="true"><img src="{{ asset(page.extra.logo) }}" alt=""></span>
+      {%- endif %}{{ page.title }}</h1>
+    {%- if page.extra.tagline %}
+    <p class="page-lede">{{ page.extra.tagline }}</p>
+    {%- endif %}
+    {#- 페이지에 버튼은 이 한 쌍뿐이다. 머리에 한 번, 그게 전부다 — 읽는 사람이
+        갈지 말지 정하는 자리가 여기다. #}
+    {%- if page.extra.actions %}
+    <div class="btn-row">
+      {%- for a in page.extra.actions %}
+      <a class="btn btn-{{ a.style }}" href="{{ a.url }}"{% if a.url is startingwith "http" %} target="_blank" rel="noopener noreferrer"{% endif %}>
+        <span>{{ a.label }}</span>{{ i_out() }}
+      </a>
       {%- endfor %}
     </div>
+    {%- endif %}
+  </header>
+
+  <div class="fence" aria-hidden="true">+++</div>
+
+  {%- if landing %}
+  {{ spec(page) }}
+  {{ prose(page) }}
+  {%- else %}
+  {{ prose(page) }}
+  {{ spec(page) }}
+  {%- endif %}
+
+  {%- for s in page.extra.session %}
+  <section class="block">
+    <header class="block-head">
+      {%- if s.eyebrow %}<p class="eyebrow">{{ s.eyebrow }}</p>{% endif %}
+      {%- if s.title %}<h2 class="block-title">{{ s.title }}</h2>{% endif %}
+    </header>
+    <pre class="term"><code>{%- for l in s.lines %}
+<span class="term-{{ l.kind }}">{{ l.text }}</span>
+{%- endfor %}</code></pre>
+    {%- if s.caption %}
+    <p class="term-caption">{{ s.caption }}</p>
+    {%- endif %}
+  </section>
+  {%- endfor %}
+
+  {%- if page.extra.register %}
+  <section class="block">
+    <header class="block-head">
+      {%- if page.extra.register_eyebrow %}<p class="eyebrow">{{ page.extra.register_eyebrow }}</p>{% endif %}
+      {%- if page.extra.register_title %}<h2 class="block-title">{{ page.extra.register_title }}</h2>{% endif %}
+      {%- if page.extra.register_intro %}<p class="block-intro">{{ page.extra.register_intro }}</p>{% endif %}
+    </header>
+    <ol class="register">
+      {%- for r in page.extra.register %}
+      <li>
+        {#- 순번은 저자가 적지 않는다. 순서가 곧 번호이므로 루프가 만든다. #}
+        <span class="register-index" aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
+        <div>
+          <h3 class="register-title">{{ r.title }}</h3>
+          <p class="register-body">{{ r.body }}</p>
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
   </section>
   {%- endif %}
 
-  {%- if page.extra.session_lines %}
-  <section class="block">
-    <header class="block-head">
-      {%- if page.extra.session_eyebrow %}<p class="eyebrow">{{ page.extra.session_eyebrow }}</p>{% endif %}
-      {%- if page.extra.session_title %}<h2 class="block-title">{{ page.extra.session_title }}</h2>{% endif %}
-    </header>
-    <div class="term">
-      <div class="term-bar">
-        <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="term-name">{{ page.extra.session_shell }}</span>
-      </div>
-      <pre class="term-body"><code>{%- for l in page.extra.session_lines %}
-<span class="term-{{ l.kind }}">{{ l.text }}</span>
-{%- endfor %}</code></pre>
+  {%- if page.extra.closing_text %}
+  <section class="closing">
+    <p>{{ page.extra.closing_text }}</p>
+    {%- if page.extra.closing_links %}
+    <div class="btn-row">
+      {%- for l in page.extra.closing_links %}
+      <a class="btn btn-text" href="{{ l.url }}"{% if l.url is startingwith "http" %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ l.label }}</a>
+      {%- endfor %}
     </div>
-    {%- if page.extra.session_caption %}
-    <p class="term-caption">{{ page.extra.session_caption }}</p>
     {%- endif %}
   </section>
   {%- endif %}
-
-  {%- if page.extra.cta_title %}
-  <section class="cta">
-    <div class="cta-inner">
-      <h2 class="cta-title">{{ page.extra.cta_title }}</h2>
-      {%- if page.extra.cta_text %}<p class="cta-text">{{ page.extra.cta_text }}</p>{% endif %}
-      {%- if page.extra.cta_actions %}
-      <div class="btn-row">
-        {%- for a in page.extra.cta_actions %}
-        <a class="btn btn-{{ a.style }}" href="{{ a.url }}"{% if a.url is startingwith "http" %} target="_blank" rel="noopener noreferrer"{% endif %}>
-          <span>{{ a.label }}</span>{{ i_arrow() }}
-        </a>
-        {%- endfor %}
-      </div>
-      {%- endif %}
-    </div>
-  </section>
-  {%- endif %}
-</div>
+</article>
 {% endblock %}

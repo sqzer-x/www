@@ -1,0 +1,32 @@
+{#- 규격서. 배지 줄과 큰 숫자 띠를 대신하고, 같은 값을 세 번 찍던 것을 한 번으로
+    줄인다. url 이 빈 문자열이면 링크가 아니라 글자다. #}
+{% macro spec(page) %}
+  {%- if page.extra.spec or page.extra.repo %}
+  <table class="spec">
+    <tbody>
+      {%- for s in page.extra.spec %}
+      <tr>
+        <th scope="row">{{ s.key }}</th>
+        <td>{% if s.url %}<a href="{{ s.url }}"{% if s.url is startingwith "http" %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ s.value }}</a>{% else %}{{ s.value }}{% endif %}</td>
+      </tr>
+      {%- endfor %}
+      {%- if page.extra.repo %}
+      <tr>
+        <th scope="row">{{ t("repository") }}</th>
+        <td><a href="{{ page.extra.repo }}" target="_blank" rel="noopener noreferrer">{{ page.extra.repo | replace("https://", "") }}</a></td>
+      </tr>
+      <tr>
+        <th scope="row">{{ t("stars") }}</th>
+        <td class="stars">{{ page.extra.stars }}</td>
+      </tr>
+      {%- endif %}
+    </tbody>
+  </table>
+  {%- endif %}
+{% endmacro %}
+
+{% macro prose(page) %}
+  {%- if page.content %}
+  <div class="prose">{{ page.content | safe }}</div>
+  {%- endif %}
+{% endmacro %}

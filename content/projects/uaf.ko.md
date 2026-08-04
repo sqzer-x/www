@@ -7,43 +7,63 @@ date = 2026-02-14
 [extra]
 tier = "brief"
 
-eyebrow  = "무선 AP 감사 · Python"
-tagline  = "PCI-DSS 는 무선 점검을 요구한다. 그 요구를 솔직하게 옮기면 이런 질문이 된다. 이 AP 들 중 어느 것이 우리 것이고, 어느 것이 열려 있는가."
-lang     = "Python"
-license  = ""
-version  = ""
-platform = "Linux"
-repo     = "https://github.com/sqzer-x/uaf"
-stars     = 0
-accent     = "#9aa6cc"
-mark     = ""
-logo     = ""
+eyebrow = "무선 AP 감사 · Python"
+tagline = "PCI-DSS 는 무선 점검을 요구한다. 그 요구를 솔직하게 옮기면 이런 질문이 된다. 이 AP 들 중 어느 것이 우리 것이고, 어느 것이 열려 있는가."
 
+# 저장소와 별 줄은 template 이 이 두 값에서 만든다. tools/stars.py 가 고쳐
+# 쓰는 것이 이 짝이라, 스펙 표에 손으로 적으면 조용히 낡는다. 0 이어도 낸다.
+repo  = "https://github.com/sqzer-x/uaf"
+stars = 0
+
+accent = "#9aa6cc"
+mark   = ""
+logo   = ""
+
+# 페이지에 버튼은 이 한 쌍뿐이다. 머리에 한 번, 그게 전부다.
 actions = [
   { label = "소스", url = "https://github.com/sqzer-x/uaf", style = "ghost" },
 ]
 
-facts = [
-  { value = "3",     label = "탐지 대역" },
-  { value = "5",     label = "보안 분류" },
-  { value = "3.10+", label = "Python" },
-  { value = "root",  label = "권한" },
-]
+# 브리프에는 세션도 결정 목록도 없다. 빈 배열이 이미 '없음'이라
+# 플래그를 따로 두지 않는다 — 템플릿이 데이터를 보고 정한다.
+register_eyebrow = ""
+register_title   = ""
+register_intro   = ""
+register = []
+session  = []
 
-features_eyebrow = ""
-features_title   = ""
-features_intro   = ""
-features = []
+# 닫는 줄. 제목도 띠도 두 번째 버튼 줄도 없다 — 한 문장과 갈 곳뿐이다.
+closing_text  = ""
+closing_links = []
 
-session_eyebrow = ""
-session_title   = ""
-session_shell   = ""
-session_caption = ""
-session_lines = []
+# ---- 스펙. 배지 줄과 큰 숫자 띠를 대신한다. 순서가 곧 화면 순서다.
+# 키는 라벨이라 두 언어에서 영어다. url 이 비면 링크가 아니라 글자다.
 
-cta_title = ""
-cta_text  = ""
-cta_actions = []
+[[extra.spec]]
+key = "Language"
+value = "Python 3.10+"
+url = ""
+
+[[extra.spec]]
+key = "Platform"
+value = "Linux"
+url = ""
+
+[[extra.spec]]
+key = "Bands"
+value = "2.4 · 5 · 6 GHz"
+url = ""
+
+[[extra.spec]]
+key = "Security classes"
+value = "WEP · WPA · WPA2 · WPA3 · OPN"
+url = ""
+
+[[extra.spec]]
+key = "Privileges"
+value = "root"
+url = ""
+
 +++
 
 스캔 도구는 대개 SSID 목록에서 멈춘다. 감사 보고서에는 그것만으로 부족하다.
