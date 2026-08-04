@@ -7,63 +7,43 @@ date = 2026-02-06
 [extra]
 tier = "brief"
 
-eyebrow = "Active Directory DNS · PowerShell"
-tagline = "망이 끊긴 윈도우 환경에서 DNS 영역이 곧 지도이고, 그 지도는 이미 Active Directory 가 들고 있다. 이 도구는 그걸 직접 달라고 한다."
+eyebrow  = "Active Directory DNS · PowerShell"
+tagline  = "망이 끊긴 윈도우 환경에서 DNS 영역이 곧 지도이고, 그 지도는 이미 Active Directory 가 들고 있다. 이 도구는 그걸 직접 달라고 한다."
+lang     = "PowerShell"
+license  = ""
+version  = ""
+platform = "Windows"
+repo     = "https://github.com/sqzer-x/udfx"
+stars     = 0
+accent     = "#c2a06e"
+mark     = ""
+logo     = ""
 
-# 저장소와 별 줄은 template 이 이 두 값에서 만든다. tools/stars.py 가 고쳐
-# 쓰는 것이 이 짝이라, 스펙 표에 손으로 적으면 조용히 낡는다. 0 이어도 낸다.
-repo  = "https://github.com/sqzer-x/udfx"
-stars = 0
-
-accent = "#c2a06e"
-mark   = ""
-logo   = ""
-
-# 페이지에 버튼은 이 한 쌍뿐이다. 머리에 한 번, 그게 전부다.
 actions = [
   { label = "소스", url = "https://github.com/sqzer-x/udfx", style = "ghost" },
 ]
 
-# 브리프에는 세션도 결정 목록도 없다. 빈 배열이 이미 '없음'이라
-# 플래그를 따로 두지 않는다 — 템플릿이 데이터를 보고 정한다.
-register_eyebrow = ""
-register_title   = ""
-register_intro   = ""
-register = []
-session  = []
+facts = [
+  { value = "LDAP",        label = "조회 방식" },
+  { value = "5.1+",        label = "PowerShell" },
+  { value = "도메인 사용자", label = "권한" },
+  { value = "4",           label = "출력 파일" },
+]
 
-# 닫는 줄. 제목도 띠도 두 번째 버튼 줄도 없다 — 한 문장과 갈 곳뿐이다.
-closing_text  = ""
-closing_links = []
+features_eyebrow = ""
+features_title   = ""
+features_intro   = ""
+features = []
 
-# ---- 스펙. 배지 줄과 큰 숫자 띠를 대신한다. 순서가 곧 화면 순서다.
-# 키는 라벨이라 두 언어에서 영어다. url 이 비면 링크가 아니라 글자다.
+session_eyebrow = ""
+session_title   = ""
+session_shell   = ""
+session_caption = ""
+session_lines = []
 
-[[extra.spec]]
-key = "Language"
-value = "PowerShell 5.1+"
-url = ""
-
-[[extra.spec]]
-key = "Platform"
-value = "Windows"
-url = ""
-
-[[extra.spec]]
-key = "Method"
-value = "LDAP"
-url = ""
-
-[[extra.spec]]
-key = "Privileges"
-value = "도메인 사용자"
-url = ""
-
-[[extra.spec]]
-key = "Output files"
-value = "4"
-url = ""
-
+cta_title = ""
+cta_text  = ""
+cta_actions = []
 +++
 
 AD 통합 DNS 에 등록된 모든 도메인과 서브도메인을 LDAP 으로 읽는다. 인터넷도,
