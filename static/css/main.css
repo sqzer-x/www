@@ -997,7 +997,7 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
     /* 이름이 안쪽, 눈금이 바깥쪽이다. 눈금은 스크롤 막대 옆에 서는 스크롤
        가구이고 이름은 글 쪽으로 흐른다 — 반대로 두면 눈이 글에서 멀어지는
        방향으로 읽어 나가야 한다. */
-    grid-template-columns: minmax(0, 1fr) 1px;
+    grid-template-columns: minmax(0, 1fr) 2px;
     column-gap: 0.9rem;
     row-gap: 0.3rem;
     /* 행 높이는 ui.js 가 grid-template-rows 로 쓴다. 겹침 풀이를 격자에 맡기면
@@ -1012,7 +1012,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
        폭은 본문과 겹치지 않는 만큼까지만 — 1280px 에서 28px 이 남는다. */
     right: 0;
     width: min(16rem, calc(50vw - var(--read) / 2 + var(--gutter) - 1.5rem));
-    padding-right: 1rem;
+    /* 눈금과 창 끝 사이. 스크롤 막대 바로 옆이 이 물건의 자리다 — 멀어질수록
+       본문 여백에 떠 있는 장식으로 보이고, 붙을수록 스크롤 가구로 읽힌다.
+       포커스 링이 2px 테두리에 3px 오프셋이라 그만큼은 남긴다. */
+    padding-right: 0.5rem;
     top: 50%; transform: translateY(-50%);
     height: min(64vh, 34rem);
     /* 마스트헤드(30) 아래. 올라온 이름이 크롬을 덮으면 안 된다. */
@@ -1020,7 +1023,7 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   }
 
   /* 눈금은 세 단의 밝기다: 아직 안 읽은 것, 읽은 것, 지금 읽는 것. 색조는 한
-     가지뿐이라 1px 에서도 순서가 읽힌다 — 주황을 섞었더니 지금 자리가 이 열에서
+     가지뿐이라 2px 에서도 순서가 읽힌다 — 주황을 섞었더니 지금 자리가 이 열에서
      제일 어두운 표시가 됐고(2.1:1), 읽은 자리가 그보다 두 배 진했다. 과거가
      현재보다 크게 그려지면 그건 위치 표시가 아니다. */
   .rail-seg { background: var(--rule-3); }
