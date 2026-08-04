@@ -10,7 +10,7 @@ portrait_alt = "sqzer"
 +++
 
 안녕하세요! 저는 온라인에서 SQZER라는 이름으로 활동하고 있는 안혁진입니다. 한국을
-거점으로 활동 중인 Software & Security egineer이자 창업가입니다.
+거점으로 활동 중인 Software & Security engineer이자 창업가입니다.
 
 C++, Rust, Python 같은 언어로 프로그래밍하는 것을 좋아합니다. 죽을 때까지
 쥐어짜내고 망가뜨리는 것을 즐기기 때문에 'SQZER'라고 불리는 것을 좋아합니다.
