@@ -4,6 +4,7 @@
     흐름을 끊고, 폭과 비율을 문서마다 다시 정해야 한다. 머리에 두면 자리가
     한 곳이고 규격도 하나다. #}
 {% extends "base.html" %}
+{% from "partials/lang.html" import lang_switch %}
 
 {% block content %}
 <div class="wrap wrap-read">
@@ -19,6 +20,7 @@
     {%- if page.description %}
     <p class="page-lede">{{ page.description }}</p>
     {%- endif %}
+    <div class="page-meta">{{ lang_switch(page) }}</div>
   </header>
 
   <div class="fence" aria-hidden="true">+++</div>

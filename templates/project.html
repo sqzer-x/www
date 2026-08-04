@@ -10,6 +10,7 @@
     없는 항목만 숫자가 빠지면 줄이 어긋난다. #}
 {% extends "base.html" %}
 {% from "partials/icons.html" import i_out, i_arrow %}
+{% from "partials/lang.html" import lang_switch %}
 
 {% block content %}
 <div class="{{ "wrap" if page.extra.tier == "landing" else "wrap wrap-read" }} project" data-tier="{{ page.extra.tier }}"
@@ -45,6 +46,8 @@
         {%- if page.extra.platform %}<li>{{ page.extra.platform }}</li>{% endif %}
         {%- if page.extra.repo %}<li class="stars">{{ page.extra.stars }} ★</li>{% endif %}
       </ul>
+
+      {{ lang_switch(page) }}
 
       {%- if page.extra.actions %}
       <div class="btn-row">

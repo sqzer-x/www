@@ -1,0 +1,45 @@
+{#- 언어 전환. 크롬이 아니라 본문에 붙는다.
+
+    마스트헤드에 있을 때는 "이 사이트를 한국어로 본다"는 전역 설정처럼 보였는데,
+    실제로 하는 일은 **지금 이 문서의 다른 판으로 간다**는 것이다. 자리를 문서
+    안으로 옮기면 그 뜻이 자리로 드러나고, 크롬에는 세 갈래와 검색만 남는다.
+
+    라벨이 EN / KO 인 이유: 이 사이트의 크롬은 두 언어에서 영어다. 그리고 이건 두
+    낱말이 나란히 서서 서로를 설명하는 자리다 — "한국어" 옆의 "EN" 은 무엇을
+    고르는 것인지 말해 주지만, "English" 옆의 "한국어" 는 한쪽만 읽는 사람에게
+    한쪽만 읽힌다. 두 글자짜리 코드는 어느 쪽에서도 같게 읽힌다.
+
+    지금 보고 있는 언어가 **더 밝다**. 참조 사이트는 반대로 두었는데(현재가 제일
+    어둡다) 그러면 "어디에 있는지"를 알려고 두 회색을 견줘 봐야 한다. 이 집의
+    규칙은 이미 정해져 있다 — 내비의 현재 항목이 눈금과 함께 밝아진다.
+
+    번역이 없는 페이지에서는 통째로 안 나온다. page.translations 가 비면 아무것도
+    그리지 않는다. 없는 판으로 가는 링크나 회색 처리된 라벨을 남기지 않는 이유는,
+    둘 다 "있는데 지금 못 쓴다"는 뜻이 되기 때문이다. 없는 것은 없다. #}
+
+{% macro lang_cur(page) -%}
+<span class="lang-cur" aria-current="true">{{ page.language }}</span>
+{%- endmacro %}
+
+{#- lang 은 이 요소의 글자가 무슨 말인지를 말하는 속성이다. 여기 글자는 라틴 두
+    자라 lang="ko" 를 붙이면 스크린리더가 "ko" 를 한국어 음가로 읽는다.
+    목적지의 언어는 hreflang 이 이미 지고 있다. #}
+{% macro lang_alt(l) -%}
+<a href="{{ l.url }}" hreflang="{{ l.code }}" title="{{ l.name }}">{{ l.code }}</a>
+{%- endmacro %}
+
+{#- 순서는 언제나 EN, KO 다. 현재 언어를 앞에 세우면 언어를 바꿀 때마다 두 낱말이
+    자리를 맞바꿔서, 방금 누른 것이 커서 밑에서 도망간다. #}
+{% macro lang_switch(page) -%}
+{%- if page.translations %}
+<nav class="langs" aria-label="{{ t("language") }}">
+  {%- if page.language == "en" %}
+  {{ lang_cur(page) }}
+  {%- for l in page.translations %}{{ lang_alt(l) }}{% endfor %}
+  {%- else %}
+  {%- for l in page.translations %}{{ lang_alt(l) }}{% endfor %}
+  {{ lang_cur(page) }}
+  {%- endif %}
+</nav>
+{%- endif %}
+{%- endmacro %}

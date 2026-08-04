@@ -1,5 +1,6 @@
 {#- 산문 한 장. About 이 이걸 쓴다. #}
 {% extends "base.html" %}
+{% from "partials/lang.html" import lang_switch %}
 
 {% block content %}
 <div class="wrap wrap-read">
@@ -8,6 +9,7 @@
     {%- if page.description %}
     <p class="page-lede">{{ page.description }}</p>
     {%- endif %}
+    <div class="page-meta">{{ lang_switch(page) }}</div>
   </header>
 
   <div class="fence" aria-hidden="true">+++</div>

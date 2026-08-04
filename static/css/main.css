@@ -276,13 +276,13 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   padding: 0; border: 0; background: none; cursor: pointer;
   font: inherit; font-size: 0.7rem; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--ink-3);
-  /* 좁은 화면에서 "한국어"가 세 줄로 쪼개져 마스트헤드 높이를 밀어 올린다.
-     컨트롤 라벨은 낱말 하나이고, 낱말 하나는 줄바꿈하지 않는다. */
+  /* 컨트롤 라벨은 낱말 하나이고, 낱말 하나는 줄바꿈하지 않는다. body 가
+     overflow-wrap: anywhere 라 이걸 빼면 좁은 화면에서 "Search" 가 쪼개져
+     마스트헤드 높이를 밀어 올린다. */
   white-space: nowrap;
   transition: color var(--tr-ink);
 }
 .chip:hover { color: var(--ink); }
-.chip-lang { font-size: 0.7rem; }
 
 /* 키를 말하는 컨트롤 하나만 진짜 키캡이 된다 — 터미널에서 모는 도구라 얇은
    테두리에 작은 반경. 네 칩에 전부 테두리를 두르면 테두리 없는 타일·원장·
@@ -366,12 +366,48 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   text-wrap: pretty;
 }
 
+/* 표제 아래 한 줄. 날짜와 언어가 여기 함께 선다 — 둘 다 이 문서에 대한 사실이고,
+   따로 세우면 제목과 본문 사이에 줄만 하나 더 생긴다. 비어 있으면 gap 도 여백도
+   없다(빈 flex 컨테이너라 높이가 0 이다). */
 .page-meta {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: center; gap: 1.1rem;
   margin: 1.2rem 0 0;
   font-family: var(--mono); font-size: 0.74rem;
   letter-spacing: 0.08em; font-variant-numeric: tabular-nums;
   color: var(--ink-3);
 }
+.page-meta:empty { margin: 0; }
+
+/* ---------- language switch ---------- */
+
+/* 두 글자 코드 둘. 사이에 구분자를 두지 않는다 — 간격이 이미 나누고 있고,
+   가운뎃점이나 슬래시를 넣으면 두 낱말이 한 낱말처럼 붙어 보인다.
+
+   현재 언어가 제일 밝다. 크롬의 현재 항목이 밝아지는 것과 같은 규칙이고,
+   반대로 두면 "지금 어디에 있는지"를 알려고 두 회색을 견줘야 한다.
+   갈 수 있는 쪽에는 밑줄 자리가 비어 있다가 손이 닿으면 액센트로 채워진다 —
+   색만으로 뜻을 전하지 않는다는 이 사이트의 규칙 그대로다. */
+/* 자기 크기를 스스로 갖는다. .page-meta 안에도 서고 프로젝트 히어로의 배지 줄
+   아래에도 서는데, 부모마다 크기가 달라지면 같은 컨트롤이 페이지마다 다른
+   물건으로 보인다. */
+.langs {
+  display: inline-flex; gap: 0.55rem;
+  font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+/* 히어로에서는 배지 줄 바로 아래 붙는다 — 둘 다 이 프로젝트에 대한 사실이다. */
+.hero-main > .langs { margin-top: 0.85rem; }
+.lang-cur { color: var(--ink); }
+/* 갈 수 있는 쪽은 이 사이트의 링크 단이다(--ink-3). --ink-4 는 날짜와 펜스의
+   단이라 "있지만 누를 것은 아닌" 자리이고, 라이트 테마에서는 1.7:1 로 사실상
+   안 보인다. 지금 판(--ink)과의 차이는 이 단에서도 충분히 크다. */
+.langs a {
+  color: var(--ink-3);
+  border-bottom: 1px solid transparent;
+  transition: color var(--tr-ink), border-color var(--tr-ink);
+}
+.langs a:hover { color: var(--ink-2); border-bottom-color: var(--accent); }
 
 .eyebrow {
   margin: 0 0 0.9rem;
@@ -436,9 +472,14 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   max-width: 44ch; color: var(--ink-2); text-wrap: pretty;
 }
 
+/* 첫 화면에서는 언어 줄이 문 위에 선다. 문 뒤에 붙이면 가운데 정렬 스택에서
+   한 줄이 통째로 접힌 자리 아래로 내려간다. 문의 margin-top 이 이 줄에 맞춰
+   깎여 있으므로(clamp(0.85rem…)), 두 값은 함께 고쳐야 한다. */
+.hero-home .page-meta { margin-top: clamp(1.3rem, 3vw, 1.9rem); }
+
 /* 문. 채운 알약이 아니라 밑줄 그은 라벨이다. */
 .door {
-  display: inline-block; margin-top: clamp(1.8rem, 4vw, 2.75rem);
+  display: inline-block; margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
   padding-bottom: 0.35rem;
   font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--ink-2);
@@ -925,7 +966,7 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 
 /* ---------- toc & pager ---------- */
 
-.toc { margin: 2rem auto 0; max-width: var(--read); padding: 1rem 1.25rem; border-left: 1px solid var(--rule-2); }
+.toc { margin: 2rem auto 2.5rem; max-width: var(--read); padding: 1rem 1.25rem; border-left: 1px solid var(--rule-2); }
 .toc-label {
   margin: 0 0 0.5rem; font-size: 0.66rem;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-4);
@@ -935,6 +976,112 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .toc li { margin: 0.3rem 0; font-size: 0.88rem; }
 .toc a { color: var(--ink-3); transition: color var(--tr-ink); }
 .toc a:hover { color: var(--accent); }
+
+/* ---------- reading rail ---------- */
+
+/* 목차의 두 번째 모습. 넓은 화면에서 오른쪽 여백에 서고, 절마다 세로 헤어라인
+   한 칸이며 칸의 높이가 그 절이 글에서 차지하는 몫이다. 목록은 절이 몇 개인지
+   말하고 지도는 어느 절이 긴지 말한다 — 같은 자료의 다른 사실이라 둘 다 있어도
+   중복이 아니다.
+
+   레일이 실제로 만들어졌을 때만 목록이 물러난다(.has-rail 은 ui.js 가 붙인다).
+   스크립트가 못 오면 목록이 그대로 남고, 그게 이 장치의 폴백이다. 문서 안에
+   목차는 언제나 한 벌이고 접근성 트리에도 한 벌만 남는다. */
+
+.rail { display: none; }
+
+/* 이 시트의 첫 min-width 다. 나머지는 전부 max-width — 넓게 시작해서 좁아지면
+   뺀다는 자세이고, 이것만 예외인 이유는 레일이 없던 자리를 요구하는 유일한
+   요소이기 때문이다. 좁은 화면에서는 줄이는 게 아니라 뺀다. */
+@media (min-width: 80rem) {
+  .rail {
+    display: grid;
+    /* 왼쪽이 눈금, 오른쪽이 이름. 선을 먼저 긋고 그 옆에 글을 두는 것은 .toc 의
+       border-left 와 blockquote 가 이미 쓰는 이 집의 곁줄 어법이다. 눈금을 창
+       끝에 붙이면 스크롤바 바로 옆에 세로줄이 하나 더 생긴다. */
+    grid-template-columns: 1px minmax(0, 1fr);
+    column-gap: 0.9rem;
+    row-gap: 0.4rem;
+    /* 행 높이는 ui.js 가 grid-template-rows 로 쓴다. 겹침 풀이를 격자에 맡기면
+       참조 구현이 손으로 짠 두 번의 밀어내기 패스와 그 안의 상수 셋이 통째로
+       없어진다. */
+
+    position: fixed;
+    /* 창이 아니라 본문에 붙는다. right:0 으로 매달면 2560px 에서 레일만 500px
+       멀어져 무엇의 눈금인지 알 수 없게 된다. .wrap 은 --gutter 만큼 안쪽
+       패딩이 있으므로 글자가 끝나는 자리는 50vw + --read/2 - --gutter 다.
+       거기서 2.5rem 떨어뜨린다 — 이 부품의 유일한 임의값이고, 본문과 레일이
+       서로 다른 것으로 읽히는 최소 거리다. 폭도 같은 값들에서 끌어내므로
+       --read 를 고치면 레일이 따라온다(.wrap-ledger 가 같은 방법을 쓴다). */
+    left: calc(50vw + var(--read) / 2 - var(--gutter) + 2.5rem);
+    width: min(14rem, calc(50vw - var(--read) / 2 + var(--gutter) - 4rem));
+    top: 50%; transform: translateY(-50%);
+    height: min(58vh, 30rem);
+    /* 마스트헤드(30) 아래. 올라온 이름이 크롬을 덮으면 안 된다. 검색은 modal
+       <dialog> 라 top layer 에 뜨므로 셈에 넣지 않는다. */
+    z-index: 20;
+    /* 레일 자체는 손을 받지 않는다. 여백 전체를 투명한 판으로 덮으면 나중에 그
+       여백에 놓는 것이 전부 눌리지 않는다. */
+    pointer-events: none;
+  }
+
+  .rail-seg {
+    position: relative;
+    background: var(--rule-2);
+    pointer-events: auto;
+    transition: background-color var(--tr-ink);
+  }
+  /* 1px 은 겨눌 수 없다. 보이는 선은 그대로 두고 손이 닿는 자리만 넓힌다.
+     오른쪽 1rem 은 column-gap(0.9rem)보다 넓다 — 눈금에서 이름으로 커서가
+     건너가는 중간에서 반응이 끊기면 이름이 도로 사라진다. 세로 -0.2rem 은
+     row-gap 의 절반이라 칸 사이에서도 안 끊긴다. */
+  .rail-seg::before { content: ""; position: absolute; inset: -0.2rem -1rem; }
+
+  /* 읽은 만큼. 높이는 ui.js 가 스크롤에서 직접 쓴다 — 전환을 걸면 화면보다 한
+     박자 늦게 따라와 거짓말을 한다. 이미 연속값에 매인 것은 애니메이션하지
+     않는다. 색은 상태라서 전환한다. */
+  .rail-fill {
+    display: block; width: 100%; height: 0;
+    background: var(--ink-3);
+    transition: background-color var(--tr-ink);
+  }
+  /* 세 단이다: 헤어라인은 아직 안 읽은 것, 잉크는 읽은 것, 주황은 지금 읽는
+     것. 주황이 색 하나로만 말하지 않는다 — 지금 칸은 이 열에서 유일하게 덜 찬
+     칸이고(위는 다 차고 아래는 비어 있다), 그 이름은 유일하게 --ink 다.
+     클래스로 표시하는 이유: 왼쪽이 눈금이라 DOM 에서 눈금이 이름보다 앞에 오고,
+     CSS 에는 앞 형제를 짚는 선택자가 없다. */
+  .rail-fill.is-now { background: var(--accent); }
+
+  .rail-label {
+    align-self: start;
+    /* 두 줄까지. 칸의 아래끝 2.2rem 이 정확히 두 줄 높이라, 넘치면 옆 칸을
+       침범한다. 지금 글의 제일 긴 제목이 30자이고 1280px 에서 한 줄이 26자쯤이라
+       두 줄에 들어온다.
+       ponytail: 여기 걸리는 제목이 잦아지면 breakpoint 를 84rem 으로 올려 이름
+       열을 넓히는 쪽이 먼저다. 글자 크기를 줄이는 건 그다음. */
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.72rem; line-height: 1.35;
+    color: var(--ink-3);
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--tr-ink), color var(--tr-ink);
+  }
+  .rail-label[aria-current] { color: var(--ink); }
+
+  /* 드러나는 것은 숨어 있던 것이지 자리를 옮긴 것이 아니다. 이름은 제자리에서
+     밝아지고 눈금은 색이 한 단 오른다 — 굵어지지도, 밀려나지도 않는다. 박자는
+     이 시트의 유일한 박자 하나다. */
+  .rail:hover .rail-label,
+  .rail:focus-within .rail-label { opacity: 1; pointer-events: auto; }
+  .rail:hover .rail-seg,
+  .rail:focus-within .rail-seg { background: var(--rule-3); }
+
+  /* 지금 절 위에 손이 올라가도 현재 표시를 지우지 않는다. hover 와 현재를 같게
+     칠하면 목차에 커서를 얹는 것만으로 위치 표시가 사라진다. */
+  .rail-label:not([aria-current]):hover { color: var(--accent); }
+
+  .has-rail .toc { display: none; }
+}
 
 .pager {
   display: flex; gap: 1.5rem;

@@ -2,7 +2,7 @@
 title = "What this site is built on"
 description = "One binary, one stylesheet, two scripts, and no build step that is not the generator."
 date = 2026-08-02
-toc = false
+toc = true
 +++
 
 This site is built by [sqzass](@/projects/sqzass.md), which I wrote, and

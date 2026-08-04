@@ -2,7 +2,7 @@
 title = "이 사이트는 무엇으로 만들어졌나"
 description = "바이너리 하나, 스타일시트 하나, 스크립트 둘, 그리고 생성기 말고는 빌드 단계가 없다."
 date = 2026-08-02
-toc = false
+toc = true
 +++
 
 이 사이트는 직접 만든 [sqzass](@/projects/sqzass.md) 가 빌드하고, 바이너리를

@@ -2,7 +2,7 @@
 title = "자기 날짜를 못 보여 주는 목록"
 description = "날짜순으로 세워 놓고 그 날짜를 숨기는 생성기. 고치는 데 든 값과, 일부러 빼놓은 것."
 date = 2026-08-03
-toc = false
+toc = true
 +++
 
 [sqzass](@/projects/sqzass.md) 는 처음부터 섹션을 날짜순으로 정렬할 수 있었다.

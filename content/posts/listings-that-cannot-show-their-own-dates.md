@@ -2,7 +2,7 @@
 title = "Listings that cannot show their own dates"
 description = "A generator that sorts by date and then hides it. What the fix cost, and what I left out."
 date = 2026-08-03
-toc = false
+toc = true
 +++
 
 [sqzass](@/projects/sqzass.md) has always been able to sort a section by date.
