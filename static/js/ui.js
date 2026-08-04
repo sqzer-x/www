@@ -81,33 +81,54 @@
 
   /* ---------- reading rail ---------- */
 
-  /* 넓은 화면에서 오른쪽 여백에 서는 목차. 항목마다 세로 헤어라인 한 칸이고,
+  /* 넓은 화면에서 오른쪽 가장자리에 서는 목차. 항목마다 세로 헤어라인 한 칸이고,
      칸의 높이가 그 절이 글에서 차지하는 몫이다. 항목이 다 같은 크기인 목록은
      "가운데 절이 이 글의 절반"이라는 사실을 말하지 못한다.
 
      자료는 본문에 이미 있는 .toc 다. 이 파일이 못 오면 그 목록이 그대로 남는다 —
      목록을 감추는 CSS 가 여기서 붙이는 .has-rail 뒤에 있다.
 
+     첫 칸은 제목에서 첫 소제목까지다. 그게 없을 때 재 보니 이 글의 34% 가 어느
+     칸에도 안 들어갔고, 처음 750px 을 굴리는 동안 레일이 통째로 죽어 있었다.
+     도착해서 읽기 시작한 사람에게 아무 반응이 없는 진행 표시는 고장으로 보인다.
+
      넓은 화면인지는 여기서 묻지 않는다. 그 판단은 main.css 의 min-width 하나가
      갖고 있다. 두 곳에 두면 두 값이 조용히 어긋나고, 그때 나오는 증상은 "레일이
-     보이는데 안 찬다"라 숫자 문제로 보이지 않는다. 숨어 있을 때 여기가 하는 일은
-     짧은 배열 하나에 대한 산수뿐이라 값이 없다.
+     보이는데 안 찬다"라 숫자 문제로 보이지 않는다.
 
-     이른 반환이 여러 번 필요해서 안쪽 IIFE 다. 바깥 IIFE 에서 return 하면 나중에
-     이 아래에 절을 하나 더 붙이는 사람이 조용히 잃는다. */
+     이른 반환이 여러 번 필요해서 안쪽 IIFE 다. */
   (function () {
-    /* 읽는 줄. 마스트헤드에 가리지 않은 높이의 위에서 30%.
-       ponytail: 절이 이 거리보다 짧으면 그 절의 이름을 눌렀을 때 다음 절이
-       현재가 된다. 짧은 절이 많은 글이 생기면 0.2 쪽으로 내린다. */
+    /* 읽는 줄. 마스트헤드에 가리지 않은 높이의 위에서 30%. */
     var LINE = 0.3;
-    /* 이만큼도 못 구르는 문서에는 진행 표시를 그리지 않는다. 못 움직이는 진행
-       표시는 진행을 말하지 않는다. */
+    /* 이만큼도 못 구르는 문서에는 진행 표시를 그리지 않는다. */
     var FLOOR = 240;
 
     var toc = document.querySelector(".toc");
     var prose = document.querySelector(".prose");
+    var title = document.querySelector(".page-title");
     if (!toc || !prose) return;
     if (root.scrollHeight - window.innerHeight < FLOOR) return;
+
+    /* 목차의 링크를 전부 쓴다. 깊이별로 고르지 않는다 — 레일이 그리는 것은
+       개요가 아니라 분량이고, 분량에는 깊이가 없다. 구조는 좁은 화면의 목록이
+       들여쓰기로 이미 말한다. */
+    var heads = [];
+    toc.querySelectorAll("a[href^='#']").forEach(function (a) {
+      var href = a.getAttribute("href");
+      /* 한국어 제목은 id 가 한글이다(#택하지-않은-우회로). "#"+id 를
+         querySelector 에 넘기면 CSS 선택자로 파싱돼 던진다. 소스에 적힌 값을
+         그대로 쓰므로 디코딩도 필요 없다. */
+      var el = document.getElementById(href.slice(1));
+      if (el) heads.push({ el: el, href: href, text: a.textContent });
+    });
+    /* 소제목이 하나뿐인 목차는 목차가 아니라 링크 하나다. */
+    if (heads.length < 2) return;
+
+    /* 첫 칸은 머리말이다. 제목을 이름으로 쓰고 <main id="content"> 로 간다 —
+       건너뛰기 링크가 이미 쓰는 진짜 앵커라, 가짜 "#" 도 클릭 핸들러도 필요
+       없다. */
+    var parts = [{ el: prose, href: "#content", text: (title && title.textContent) || "" }]
+      .concat(heads);
 
     var host = document.createElement("nav");
     host.className = "rail";
@@ -115,18 +136,13 @@
        tools/fonts.py 의 눈에도 안 띈다. */
     host.setAttribute("aria-label", toc.getAttribute("aria-label") || "");
 
-    /* 목차의 링크를 전부 쓴다. 깊이별로 고르지 않는다 — 레일이 그리는 것은
-       개요가 아니라 분량이고, 분량에는 깊이가 없다. 구조는 좁은 화면의 목록이
-       들여쓰기로 이미 말한다. */
-    var rows = [];
-    toc.querySelectorAll("a[href^='#']").forEach(function (a) {
-      var href = a.getAttribute("href");
-      /* 한국어 제목은 id 가 한글이다(#택하지-않은-우회로). "#"+id 를
-         querySelector 에 넘기면 CSS 선택자로 파싱돼 던진다. 소스에 적힌 값을
-         그대로 쓰므로 디코딩도 필요 없다 — decodeURIComponent 는 제목에 % 가
-         들어간 날 오히려 던진다. */
-      var head = document.getElementById(href.slice(1));
-      if (!head) return;
+    var rows = parts.map(function (s) {
+      /* 격자가 두 열이라 넣는 순서대로 이름·눈금이 한 행이 된다. 이름이 앞이고
+         눈금이 뒤다 — 화면에서 이름이 안쪽, 눈금이 바깥쪽이다. */
+      var label = document.createElement("a");
+      label.className = "rail-label";
+      label.setAttribute("href", s.href);
+      label.textContent = s.text;
 
       var seg = document.createElement("span");
       seg.className = "rail-seg";
@@ -134,19 +150,10 @@
       fill.className = "rail-fill";
       seg.appendChild(fill);
 
-      var label = document.createElement("a");
-      label.className = "rail-label";
-      label.setAttribute("href", href);
-      label.textContent = a.textContent;
-
-      /* 격자가 두 열이라 넣는 순서대로 눈금·이름이 한 행이 된다. 행 번호를 셀
-         필요가 없고, 그래서 이름의 세로 위치가 곧 그 절의 위치다. */
-      host.appendChild(seg);
       host.appendChild(label);
-      rows.push({ fill: fill, label: label, head: head, f: -1 });
+      host.appendChild(seg);
+      return { fill: fill, label: label, el: s.el, f: -1 };
     });
-    /* 항목이 하나뿐인 목차는 목차가 아니라 링크 하나다. */
-    if (rows.length < 2) return;
 
     /* 목차 바로 뒤에 꽂는다. body 끝에 붙이면 화면에서는 본문 옆이지만 탭
        순서에서는 본문 뒤가 되고, 다 읽은 뒤에야 닿는 목차는 아무도 안 쓴다. */
@@ -164,8 +171,8 @@
       /* 읽는 줄이 마스트헤드에 가리는 만큼을 제목 자신의 scroll-margin-top 에서
          가져온다. main.css 가 앵커 점프를 위해 이미 선언해 둔 값이고, 브라우저가
          눌러서 뛸 때 쓰는 바로 그 값이다 — 한 군데서 나오므로 "여기 있다"와
-         "여기로 간다"가 어긋날 수 없다. --masthead-h 를 고쳐도 따라온다. */
-      var pad = parseFloat(getComputedStyle(rows[0].head).scrollMarginTop) || 0;
+         "여기로 간다"가 어긋날 수 없다. */
+      var pad = parseFloat(getComputedStyle(heads[0].el).scrollMarginTop) || 0;
       lead = pad + (window.innerHeight - pad) * LINE;
 
       tops = [];
@@ -173,18 +180,16 @@
       rows.forEach(function (r) {
         /* 앞 경계보다 위로는 못 간다. 서브픽셀이나 sticky 때문에 뒤 제목이 앞
            제목보다 위로 재어지면 높이가 음수인 칸이 생긴다. */
-        prev = Math.max(absTop(r.head), prev);
+        prev = Math.max(absTop(r.el), prev);
         tops.push(prev);
       });
-      /* 읽기는 본문이 끝나는 데서 끝난다. 페이저와 콜로폰은 글이 아니다. 레일의
-         좌표계는 첫 제목부터 본문 끝까지다 — 머리말은 목차에 없으므로 레일에도
-         없다. */
+      /* 읽기는 본문이 끝나는 데서 끝난다. 페이저와 콜로폰은 글이 아니다. */
       tops.push(Math.max(absTop(prose) + prose.offsetHeight, prev + 1));
 
       /* 칸의 높이가 그 절의 몫이다. 아래끝을 두면 아주 짧은 절도 사라지지 않고
-         두 줄짜리 이름이 옆 칸을 침범하지도 않는다 — 겹침 풀이를 격자에 맡긴다.
-         ponytail: 절이 열한 개를 넘으면 아래끝의 합이 상자보다 커져 넘친다.
-         그때 손댈 곳은 2.2rem 과 min(58vh, 30rem) 둘이다. */
+         두 줄짜리 이름이 옆 칸을 침범하지도 않는다.
+         ponytail: 절이 열두 개를 넘으면 아래끝의 합이 상자보다 커져 넘친다.
+         그때 손댈 곳은 2.2rem 과 min(64vh, 34rem) 둘이다. */
       var total = tops[tops.length - 1] - tops[0];
       var track = "";
       for (var i = 0; i < rows.length; i++) {
@@ -201,9 +206,9 @@
       /* 문서 끝에 닿으면 마지막 절은 끝난 것이다. 읽는 줄은 화면 아래 한 뼘을
          영영 못 지나가므로, 이게 없으면 마지막 칸은 절대 안 찬다. */
       var done = window.scrollY + window.innerHeight >= root.scrollHeight - 2;
-      /* 첫 제목 위에서는 아무것도 현재가 아니다. 아직 시작도 안 한 사람에게
-         "1절에 있다"고 말하면 그 표시는 남은 페이지 내내 못 믿는다. */
-      var now = -1;
+      /* 머리말 칸이 있으므로 첫 화면부터 현재가 있다. 도착한 사람은 실제로
+         머리말을 읽고 있다. */
+      var now = 0;
 
       for (var i = 0; i < rows.length; i++) {
         var f = done ? 1 : (line - tops[i]) / Math.max(1, tops[i + 1] - tops[i]);
@@ -215,8 +220,7 @@
         }
         /* 화면 상자가 아니라 줄 하나로 고른다. 제목 여럿이 같이 보일 때 누가
            이기는지 따질 일이 없다 — 줄 위에 있는 마지막 절이다. 관찰자를 쓰지
-           않으므로 부드러운 스크롤과 싸울 일도 없다: 눌러서 뛰는 동안 표시가
-           지나가는 절들을 훑는 것은, 실제로 그 절들을 지나가고 있어서다. */
+           않으므로 부드러운 스크롤과 싸울 일도 없다. */
         if (line >= tops[i]) now = i;
       }
       if (done) now = rows.length - 1;
@@ -226,10 +230,8 @@
         rows[at].label.removeAttribute("aria-current");
         rows[at].fill.classList.remove("is-now");
       }
-      if (now >= 0) {
-        rows[now].label.setAttribute("aria-current", "true");
-        rows[now].fill.classList.add("is-now");
-      }
+      rows[now].label.setAttribute("aria-current", "true");
+      rows[now].fill.classList.add("is-now");
       at = now;
     }
 
