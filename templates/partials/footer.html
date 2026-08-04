@@ -9,11 +9,12 @@
 {%- set ko = page.language == "ko" %}
 {%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
 {% from "partials/icons.html" import i_github, i_instagram %}
+{% from "partials/nav.html" import nav_label %}
 <footer class="colophon">
   <div class="colophon-in">
     <nav class="colophon-nav" aria-label="{{ t("menu") }}">
       {%- for s in site.sections %}
-      <a href="{{ s.url }}">{{ s.title }}</a>
+      <a href="{{ s.url }}">{{ nav_label(s, home) }}</a>
       {%- endfor %}
       {%- if site.feed %}
       <a href="{{ site.feed }}">{{ t("feed") }}</a>

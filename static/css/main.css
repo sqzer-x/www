@@ -83,6 +83,10 @@
      가져오는 것과 같은 규칙이고, 차가운 바닥과는 보색이라 손이 닿는 자리가
      확실히 뜬다. 니어블랙 대비 9.07:1. */
   --accent: #e4a242;
+  /* 액센트 위에 얹히는 잉크. 액센트가 밝은 주황이라 두 테마 모두 어둡다 —
+     ::selection 처럼 액센트가 배경이 되는 자리에서 --bg 를 쓰면 라이트에서
+     흰 글자가 주황 위에 놓여 읽히지 않는다. */
+  --on-accent: #14140f;
 
   /* 선화 마크는 순수 흑 아니면 순수 백이다. 중간 회색은 비활성으로 읽힌다. */
   --mark-ink: #ffffff;
@@ -132,9 +136,11 @@
   --rule-3: #bac0be;
 
   --ink-rgb: 14, 18, 17;
-  /* 같은 색상(36°)에서 명도만 내린다. 니어블랙에서 9:1 인 주황이 니어화이트
-     에서는 1.9:1 로 무너진다. 이 값은 5.2:1. */
-  --accent: #935f10;
+  /* 액센트는 두 테마가 같다. 밝은 바닥에서 대비가 낮아지지만, 이 색은
+     평상시에 나오지 않고 hover·focus·현재 위치에만 쓰이며 그 자리에는 늘
+     상태 변화가 함께 있다(밑줄, 테두리, 눈금). 색 하나로만 뜻을 전하는
+     자리는 없다. */
+  --accent: #e4a242;
   --mark-ink: #000000;
 }
 
@@ -167,7 +173,7 @@ img { max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-::selection { background: var(--accent); color: var(--bg); }
+::selection { background: var(--accent); color: var(--on-accent); }
 
 * { scrollbar-width: thin; scrollbar-color: var(--rule-2) transparent; }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1074,25 +1080,18 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 /* 한국어는 라틴 타이포 장치 셋을 깨뜨린다. letter-spacing 은 음절 블록을 벌리고,
    text-transform 은 아무 일도 하지 않으며, monospace 는 한글이 프로포셔널로
    폴백하는데 공백만 mono 폭이라 어절 사이가 두 배로 벌어진다.
-   구조는 크기·굵기·색으로도 읽히고 그쪽은 도움이 필요 없다. */
+
+   여기 걸리는 것은 **한국어가 들어가는 자리만**이다. 크롬(내비·푸터·컨트롤·
+   문 링크)은 두 언어에서 영어로 고정이므로 대문자와 자간을 그대로 둔다 —
+   되돌리면 한국어 페이지에서만 라벨이 소문자로 나와 두 언어가 달라 보인다. */
 html[lang="ko"] .eyebrow,
 html[lang="ko"] .fact-label,
-html[lang="ko"] .toc-label,
-html[lang="ko"] .pager-dir,
 html[lang="ko"] .prose th,
 html[lang="ko"] .crumbs,
 html[lang="ko"] .palette-crumb,
-html[lang="ko"] .colophon-nav a,
-html[lang="ko"] .colophon-note,
-html[lang="ko"] .nav a,
-html[lang="ko"] .chip,
 html[lang="ko"] .btn,
-html[lang="ko"] .door,
-html[lang="ko"] .room-door,
 html[lang="ko"] .back,
-html[lang="ko"] .badges li,
-html[lang="ko"] .lang,
-html[lang="ko"] .tile-meta {
+html[lang="ko"] .badges li {
   font-family: var(--sans);
   letter-spacing: 0;
   text-transform: none;

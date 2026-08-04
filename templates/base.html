@@ -9,11 +9,12 @@
 {#- 서브경로에 올라갈 수도 있으므로 손으로 쓰는 링크에는 base_path를 붙인다.
     페이지 URL들은 이미 이 접두사를 품고 있어서 손댈 필요가 없다. #}
 {%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
+{% from "partials/nav.html" import nav_label %}
 <!doctype html>
 {#- 기본값을 여기 적는다. prefers-color-scheme 에 맡기지 않는 이유는 생성된
     하이라이트 스타일시트가 같은 [data-theme] 을 보기 때문이다. 둘이 서로 다른
-    근거로 결정하면 라이트 OS 를 쓰는 사람이 어두운 페이지에 밝은 코드를 본다. #}
-<html lang="{{ page.language }}" data-theme="dark">
+    근거로 결정하면 한쪽이 어두운 페이지에 밝은 코드를 낸다. #}
+<html lang="{{ page.language }}" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,7 +83,7 @@
 
     <nav class="nav" aria-label="{{ t("menu") }}">
       {%- for s in site.sections %}
-      <a href="{{ s.url }}"{% if page.url == s.url or (page.section and page.section.url == s.url) %} aria-current="true"{% endif %}>{{ s.title }}</a>
+      <a href="{{ s.url }}"{% if page.url == s.url or (page.section and page.section.url == s.url) %} aria-current="true"{% endif %}>{{ nav_label(s, home) }}</a>
       {%- endfor %}
     </nav>
 

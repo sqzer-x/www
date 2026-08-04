@@ -1,0 +1,9 @@
+{#- 갈래 라벨. site.sections 의 제목은 콘텐츠(각 언어의 _index.md)라 한국어
+    페이지에서 한국어가 된다. 크롬은 두 언어가 같아야 하므로 URL 로 골라 i18n 에서
+    가져온다 — 알려진 세 갈래 밖은 섹션 제목으로 떨어진다. #}
+{% macro nav_label(s, home) -%}
+{%- if s.url == home ~ "posts/" %}{{ t("nav_posts") }}
+{%- elif s.url == home ~ "projects/" %}{{ t("nav_projects") }}
+{%- elif s.url == home ~ "about/" %}{{ t("nav_about") }}
+{%- else %}{{ s.title }}{% endif %}
+{%- endmacro %}

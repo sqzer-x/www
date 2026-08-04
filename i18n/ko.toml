@@ -1,48 +1,59 @@
 # 템플릿이 공급하는 문자열. 본문은 content/ 에 있다.
 # 한쪽 언어에 키가 없으면 빌드 에러다 — 기본 언어로 떨어뜨리면 한국어 페이지에
 # 영어 라벨이 섞여 나가고, 그건 읽는 사람에게만 보이고 고치는 사람에게는 안 보인다.
+#
+# **크롬은 두 언어가 같다.** 내비, 푸터, 컨트롤 라벨은 한국어 페이지에서도 영어로
+# 둔다. 번역되는 것은 읽으러 온 것 — 제목, 설명, 본문 — 뿐이다. 여기 영어가
+# 반복되는 것은 빠뜨린 게 아니라 그 결정이다.
+#
+# 예외는 404 다. 그건 라벨이 아니라 읽는 사람에게 건네는 문장이라 번역한다.
 
-skip_to_content = "본문으로 건너뛰기"
-menu            = "메뉴"
-close           = "닫기"
-theme           = "테마"
-search          = "검색"
-search_the_site = "사이트 검색"
-search_hint     = "검색어를 입력하세요"
-search_empty    = "일치하는 것이 없습니다."
-search_results  = "검색 결과"
+skip_to_content = "Skip to content"
+menu            = "Menu"
+close           = "Close"
+theme           = "Theme"
+search          = "Search"
+search_the_site = "Search the site"
+search_hint     = "Type to search"
+search_empty    = "Nothing matches that."
+search_results  = "Results"
 
-all_posts    = "글 전체"
-all_projects = "프로젝트 전체"
-writing      = "글"
-recent       = "최근"
-selected     = "골라 둔 것"
+nav_posts    = "Posts"
+nav_projects = "Projects"
+nav_about    = "About"
 
-previous     = "이전"
-next         = "다음"
-back         = "돌아가기"
-published    = "발행"
-updated      = "갱신"
-on_this_page = "이 페이지"
-breadcrumb   = "현재 위치"
-home         = "홈"
+all_posts    = "All posts"
+all_projects = "All projects"
+writing      = "Writing"
+recent       = "Recent"
+selected     = "Selected"
 
-website      = "웹사이트"
-source       = "소스"
-docs         = "문서"
-repository   = "저장소"
-status       = "상태"
-language     = "언어"
-archived     = "보관됨"
-active       = "유지 중"
+previous     = "Previous"
+next         = "Next"
+back         = "Back"
+published    = "Published"
+updated      = "Updated"
+on_this_page = "On this page"
+breadcrumb   = "You are here"
+home         = "Home"
 
-copy         = "복사"
-copied       = "복사됨"
+website      = "Website"
+source       = "Source"
+docs         = "Documentation"
+repository   = "Repository"
+status       = "Status"
+language     = "Language"
+archived     = "Archived"
+active       = "Active"
 
-elsewhere    = "다른 곳"
+copy         = "Copy"
+copied       = "Copied"
 
-feed         = "피드"
-sitemap      = "사이트맵"
+elsewhere    = "Elsewhere"
 
+feed         = "Feed"
+sitemap      = "Sitemap"
+
+# 404 는 라벨이 아니라 문장이다. 길을 잃은 사람에게 건네는 말이라 번역한다.
 not_found_title = "이 페이지는 없습니다"
 not_found_body  = "주소가 틀렸거나, 페이지가 옮겨 가면서 안내를 남기지 않았습니다. 이 사이트에 있는 것은 전부 검색 한 번 거리에 있습니다."
