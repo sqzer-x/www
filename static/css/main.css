@@ -1049,7 +1049,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
     overflow: hidden;
     font-size: 0.72rem; line-height: 1.35;
-    color: var(--ink-3);
+    /* 13.7px 글자다. --ink-3 은 라이트에서 4.23:1 로 AA 아래이고, 여기서 쓰던
+       hover 액센트는 2.12:1 이라 손을 얹으면 더 안 읽혔다 — 이 열에서 액센트가
+       두 번째로 틀린 자리다. 밝기로만 간다. */
+    color: var(--ink-2);
     opacity: 0; pointer-events: none;
     transition: opacity var(--tr-ink), color var(--tr-ink);
   }
@@ -1059,14 +1062,17 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
      밝아지고 눈금은 색이 한 단 오른다 — 굵어지지도, 밀려나지도 않는다.
      여백 전체가 방아쇠라, 한 번 나온 이름까지 커서가 가는 동안 사라지지 않는다.
      박자는 이 시트의 유일한 박자 하나다. */
+  /* 눈금은 hover 에 반응하지 않는다. --rule-3 에서 --ink-4 로 옮겼더니 라이트에서
+     1.78:1 → 1.72:1 로 오히려 흐려졌고 다크에서는 1.76 → 1.77 로 아무 일도
+     일어나지 않았다 — 두 토큰의 밝기가 두 테마 모두에서 거의 같다. 사이에 낄
+     단이 없고, 이름 넷이 한꺼번에 나타나는 것이 이미 충분한 대답이다.
+     좁아지면 줄이는 게 아니라 뺀다. */
   .rail:hover .rail-label,
   .rail:focus-within .rail-label { opacity: 1; pointer-events: auto; }
-  .rail:hover .rail-seg,
-  .rail:focus-within .rail-seg { background: var(--ink-4); }
 
-  /* 지금 절 위에 손이 올라가도 현재 표시를 지우지 않는다. hover 와 현재를 같게
-     칠하면 목차에 커서를 얹는 것만으로 위치 표시가 사라진다. */
-  .rail-label:not([aria-current]):hover { color: var(--accent); }
+  /* 손이 얹힌 이름은 밝아진다. 지금 절과 같은 잉크가 되지만 둘을 가르는 것은
+     색이 아니라 눈금이다 — 지금 절만 덜 찬 칸을 갖는다. 내비도 같은 규칙이다. */
+  .rail-label:hover { color: var(--ink); }
 
   .has-rail .toc { display: none; }
 }
