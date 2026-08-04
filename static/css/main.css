@@ -89,6 +89,17 @@
           "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
+  /* 굵기 사다리. 네 단이고 간격이 고르다 — 선택자마다 값을 적으면 사다리가
+     아니라 우연의 모음이 된다. 굵은 글씨는 여전히 없다: 제일 무거운 단이 420 이다.
+     트래킹은 둘뿐이다. 가는 글자를 크게 쓰면 자간이 필요하고, 두꺼워질수록
+     그 필요가 줄어든다. */
+  --w-display: 180;
+  --w-section: 260;
+  --w-item:    340;
+  --w-label:   420;
+  --track-air: 0.03em;
+  --track-set: 0.014em;
+
   --radius: 2px;
   --masthead-h: 3.5rem;   /* sqzass 문서와 같은 높이. 내용이 아니라 크롬이라 얇아야 한다 */
   --gutter: clamp(1.25rem, 5vw, 3rem);
@@ -305,7 +316,7 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 .page-title {
   margin: 0;
   font-size: clamp(2rem, 1.4rem + 2.4vw, 3.2rem);
-  font-weight: 230;
+  font-weight: var(--w-display);
   letter-spacing: var(--track-air);
   line-height: 1.14;
   text-wrap: balance;
@@ -379,7 +390,7 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 .statement {
   margin: 0; max-width: 20ch;
   font-size: clamp(2.2rem, 1.3rem + 3.6vw, 4.2rem);
-  font-weight: 250; letter-spacing: var(--track-air); line-height: 1.1;
+  font-weight: var(--w-display); letter-spacing: var(--track-air); line-height: 1.1;
   text-wrap: balance;
 }
 
@@ -929,9 +940,9 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   margin: 2.75rem 0 0; line-height: 1.25; letter-spacing: 0.012em;
   text-wrap: balance; scroll-margin-top: calc(var(--masthead-h) + 1rem);
 }
-.prose h2 { font-size: clamp(1.3rem, 1.15rem + 0.7vw, 1.6rem); font-weight: 300; }
-.prose h3 { font-size: 1.12rem; font-weight: 400; }
-.prose h4 { font-size: 1rem; font-weight: 500; }
+.prose h2 { font-size: clamp(1.3rem, 1.15rem + 0.7vw, 1.6rem); font-weight: var(--w-section); }
+.prose h3 { font-size: 1.12rem; font-weight: var(--w-item); }
+.prose h4 { font-size: 1rem; font-weight: var(--w-label); }
 .prose h2 + *, .prose h3 + *, .prose h4 + * { margin-top: 0.8rem; }
 
 .prose a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-color: var(--rule-3); }
