@@ -40,7 +40,10 @@ jobs:
         run: python3 tools/stars.py --check
 
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+
+      # Swatinem/rust-cache 는 여기서 쓰지 않는다. 이 레포에는 Cargo.toml 이
+      # 없어서 워크스페이스를 못 찾고 매번 에러를 남긴다 — 캐시할 크레이트는
+      # 이 레포가 아니라 sqzass 쪽에 있다.
 
       # TODO: sqzer-x/sqzass#1 이 머지되면 --branch 를 지운다.
       # 목록에 날짜를 실어 오는 PageRefCtx.date 가 그 PR 에 있고, Posts 원장이
