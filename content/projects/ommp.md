@@ -15,6 +15,7 @@ version  = ""
 platform = "Linux"
 repo     = "https://github.com/sqzer-x/ommp"
 stars     = 0
+accent     = "#7fc0d4"
 mark     = ""
 logo     = ""
 

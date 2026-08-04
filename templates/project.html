@@ -12,7 +12,8 @@
 {% from "partials/icons.html" import i_out, i_arrow %}
 
 {% block content %}
-<div class="{{ "wrap" if page.extra.tier == "landing" else "wrap wrap-read" }} project" data-tier="{{ page.extra.tier }}">
+<div class="{{ "wrap" if page.extra.tier == "landing" else "wrap wrap-read" }} project" data-tier="{{ page.extra.tier }}"
+     {%- if page.extra.accent %} style="--accent: {{ page.extra.accent }}"{% endif %}>
 
   {%- if page.section %}
   <a class="back" href="{{ page.section.url }}">

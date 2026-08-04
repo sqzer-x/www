@@ -15,6 +15,7 @@ version  = ""
 platform = "Windows"
 repo     = "https://github.com/sqzer-x/udfx"
 stars     = 0
+accent     = "#c2a06e"
 mark     = ""
 logo     = ""
 

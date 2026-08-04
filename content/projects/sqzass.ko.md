@@ -15,6 +15,7 @@ version  = "0.1.0"
 platform = "Linux · macOS"
 repo     = "https://github.com/sqzer-x/sqzass"
 stars     = 0
+accent     = "#e0a06a"
 mark     = "images/projects/sqzass.png"
 logo     = ""
 

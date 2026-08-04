@@ -50,10 +50,10 @@
         <span class="lang stars">{{ p.stars }} ★</span>
         {%- endif %}
         {%- if p.site %}
-        <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}">{{ i_site() }}</a>
+        <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}" data-tooltip="{{ t("website") }}">{{ i_site() }}</a>
         {%- endif %}
         {%- if p.repo %}
-        <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}">{{ i_repo() }}</a>
+        <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}" data-tooltip="{{ t("source") }}">{{ i_repo() }}</a>
         {%- endif %}
       </div>
     </article>
@@ -86,10 +86,10 @@
         </p>
         <p class="tile-links">
           {%- if p.site %}
-          <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}">{{ i_site() }}</a>
+          <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}" data-tooltip="{{ t("website") }}">{{ i_site() }}</a>
           {%- endif %}
           {%- if p.repo %}
-          <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}">{{ i_repo() }}</a>
+          <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}" data-tooltip="{{ t("source") }}">{{ i_repo() }}</a>
           {%- endif %}
         </p>
       </article>

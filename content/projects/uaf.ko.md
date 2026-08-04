@@ -15,6 +15,7 @@ version  = ""
 platform = "Linux"
 repo     = "https://github.com/sqzer-x/uaf"
 stars     = 0
+accent     = "#9aa6cc"
 mark     = ""
 logo     = ""
 

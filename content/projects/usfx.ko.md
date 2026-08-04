@@ -15,6 +15,7 @@ version  = "1.2.0"
 platform = "크로스 플랫폼"
 repo     = "https://github.com/sqzer-x/usfx"
 stars     = 1
+accent     = "#8fb9a2"
 mark     = ""
 logo     = ""
 
