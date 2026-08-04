@@ -1,9 +1,9 @@
-/* sqzass 테마 — jade
+/* sqzass 테마 — marigold
  *
  * 이 사이트가 쓰는 테마이자 sqzass 로 만든 첫 테마다. 이름은 이 시트의 유일한
  * 색에서 따왔다. 두 번째 테마가 생기면 그것도 자기 색으로 불리면 된다.
  *
- * 청록 니어블랙 위의 가운데 정렬 갤러리. 색은 평상시에 없고 손이 닿을 때만
+ * 차가운 니어블랙 위의 가운데 정렬 갤러리. 색은 평상시에 없고 손이 닿을 때만
  * 나온다 — 액센트가 브랜딩이 아니라 보상이다.
  *
  * hover 는 색만 바꾼다. 크기가 움직이면 시선이 그리로 끌려가는데, 이 사이트에서
@@ -75,12 +75,14 @@
      hex 였다면 매번 color-mix 를 거쳐야 했을 값들이다. */
   --ink-rgb: 234, 238, 236;
 
-  /* 제이드. 이 테마의 이름이자 유일한 색이고, 평상시에는 어디에도 없다.
-     링크·포커스 링·현재 항목·손이 닿은 것에만 나온다 — 초록이면 갈 수 있는
-     것이거나 지금 있는 자리다.
-     자식 사이트들이 쓰는 자리를 피해 고른 색이다: sqzass 는 피치와 코랄,
-     blog 는 앰버, ommp 는 네온 핑크·시안·바이올렛. 청록만 비어 있었다. */
-  --accent: #2fd6a3;
+  /* 이 테마의 이름이자 유일한 색. 평상시에는 어디에도 없고 링크·포커스 링·
+     현재 항목·손이 닿은 것에만 나온다 — 주황이면 갈 수 있는 것이거나 지금
+     있는 자리다.
+     지어낸 값이 아니라 About 페이지 초상의 배경에서 그대로 뽑았다
+     (tools/icons.py 옆에서 샘플링, hsl 36° 75%). ommp 가 모든 색을 앱 소스에서
+     가져오는 것과 같은 규칙이고, 차가운 바닥과는 보색이라 손이 닿는 자리가
+     확실히 뜬다. 니어블랙 대비 9.07:1. */
+  --accent: #e4a242;
 
   /* 선화 마크는 순수 흑 아니면 순수 백이다. 중간 회색은 비활성으로 읽힌다. */
   --mark-ink: #ffffff;
@@ -130,8 +132,9 @@
   --rule-3: #bac0be;
 
   --ink-rgb: 14, 18, 17;
-  /* 니어블랙에서 읽히는 제이드가 니어화이트에서는 대비를 잃는다. 둘 다 어둡게. */
-  --accent: #0f7a5a;
+  /* 같은 색상(36°)에서 명도만 내린다. 니어블랙에서 9:1 인 주황이 니어화이트
+     에서는 1.9:1 로 무너진다. 이 값은 5.2:1. */
+  --accent: #935f10;
   --mark-ink: #000000;
 }
 
@@ -206,8 +209,13 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   border-bottom: 1px solid var(--rule);
 }
 
+/* 3열 격자. 양옆 열이 1fr 로 같으므로 가운데 열이 화면 축에 정확히 앉는다.
+   flex 에 margin-inline:auto 를 쓰면 브랜드와 도구 덩이의 폭 차이만큼 내비가
+   밀리는데, 페이지 전체가 가운데축인 사이트에서는 그 어긋남이 보인다. */
 .masthead-in {
-  display: flex; align-items: center; gap: clamp(0.75rem, 3vw, 2.5rem);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center; gap: clamp(0.75rem, 3vw, 2rem);
   height: 100%; max-width: var(--wide); margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -231,8 +239,9 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 }
 
 .nav {
-  display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2rem);
-  margin-inline: auto; min-width: 0; overflow-x: auto; scrollbar-width: none;
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  min-width: 0; overflow-x: auto; scrollbar-width: none;
 }
 .nav::-webkit-scrollbar { display: none; }
 
@@ -253,7 +262,7 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   background: var(--accent);
 }
 
-.tools { display: flex; align-items: center; gap: 0.9rem; flex: none; }
+.tools { display: flex; align-items: center; justify-content: flex-end; gap: 0.9rem; }
 
 /* 크롬 컨트롤에는 테두리가 없다. 상자를 두르면 편집물이 아니라 대시보드가 된다. */
 .chip {
@@ -279,7 +288,7 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 .chip:hover kbd { border-color: var(--rule-3); color: var(--ink-3); }
 /* 라벨이 `Ctrl /` 에서 `⌘ /` 로 바뀌어도 폭이 안 변한다 — 누르려던 것이
    도망가면 안 된다. */
-.chip-search { min-width: 6.5rem; justify-content: space-between; }
+.chip-search { min-width: 4.2rem; justify-content: flex-end; }
 
 .i-moon { display: none; }
 :root[data-theme="light"] .i-sun { display: none; }

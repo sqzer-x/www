@@ -90,8 +90,10 @@
       {%- if site.search %}
       <button class="chip chip-search search-trigger" type="button" data-index="{{ site.search }}"
               aria-label="{{ t("search_the_site") }}">
-        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        {#- 라벨은 search.js 가 읽는 사람의 수정자 키로 바꿔 쓴다. 이건 JS 가 없을 때의 값. #}
+        {#- 아이콘 없이 키캡만. 무엇을 누르면 되는지가 돋보기보다 정확한 안내이고,
+            검색이라는 이름은 aria-label 이 이미 지고 있다.
+            라벨은 search.js 가 읽는 사람의 수정자 키로 바꿔 쓴다 — 이건 JS 가
+            없을 때 남는 값. #}
         <kbd>Ctrl /</kbd>
       </button>
       {%- endif %}
