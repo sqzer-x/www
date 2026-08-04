@@ -7,8 +7,14 @@
     동작하는 일이 없다. #}
 {%- set ko = page.language == "ko" %}
 {#- 서브경로에 올라갈 수도 있으므로 손으로 쓰는 링크에는 base_path를 붙인다.
-    페이지 URL들은 이미 이 접두사를 품고 있어서 손댈 필요가 없다. #}
+    페이지 URL들은 이미 이 접두사를 품고 있어서 손댈 필요가 없다.
+
+    `home` 은 링크가 아니라 **갈래 URL 을 알아보는 접두사**다(nav_label 이 이걸로
+    /posts/ 인지 /ko/posts/ 인지 가른다). 실제로 가는 첫 화면은 `root` 이고 둘은
+    한국어에서 갈라진다 — 한국어 홈은 없다. 첫 화면은 영어 한 장뿐이고, 번역되는
+    것은 읽으러 온 문서다. 브랜드가 /ko/ 로 가면 그건 없는 페이지다. #}
 {%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
+{%- set root = site.base_path ~ "/" %}
 {% from "partials/nav.html" import nav_label %}
 <!doctype html>
 {#- 기본값을 여기 적는다. prefers-color-scheme 에 맡기지 않는 이유는 생성된
@@ -76,7 +82,7 @@
         타서 테마와 호버를 글자와 똑같이 따라간다.
         aria-hidden 인 이유는 바로 옆 텍스트가 이미 같은 이름을 말하기 때문이다 —
         여기 이름을 또 넣으면 스크린리더가 두 번 읽는다. #}
-    <a class="brand" href="{{ home }}">
+    <a class="brand" href="{{ root }}">
       <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-name">{{ site.title }}</span>
     </a>
