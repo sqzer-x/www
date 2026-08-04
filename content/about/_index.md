@@ -1,6 +1,6 @@
 +++
 title = "About"
-description = "Who is behind sqzer.com, and what gets built here."
+description = "Software & Security Engineer and Founder"
 weight = 30
 template = "about.html"
 
