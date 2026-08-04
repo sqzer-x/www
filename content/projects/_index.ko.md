@@ -34,33 +34,6 @@ repo  = "https://github.com/sqzer-x/ommp"
 stars  = 0
 
 [[extra.group]]
-id = "terminal"
-label = "터미널 도구"
-note = ""
-
-  [[extra.group.item]]
-  url = "/ko/projects/sqzass/"
-  name = "sqzass"
-  blurb = "정적 사이트 생성기. 같은 입력을 두 번 빌드하면 바이트까지 같다."
-  mark = "images/projects/sqzass.png"
-  lang = "Rust"
-  status = "active"
-  site = "https://sqzass.sqzer.com"
-  repo = "https://github.com/sqzer-x/sqzass"
-  stars = 0
-
-  [[extra.group.item]]
-  url = "/ko/projects/ommp/"
-  name = "ommp"
-  blurb = "터미널 음악 재생기. MPD 도 데몬도 없이, 실행하면 재생된다."
-  mark = ""
-  lang = "Rust"
-  status = "active"
-  site = "https://ommp.sqzer.com"
-  repo = "https://github.com/sqzer-x/ommp"
-  stars = 0
-
-[[extra.group]]
 id = "security"
 label = "보안 도구"
 note = "내부망이 무언가를 숨겨 두는 층마다 하나씩. 셋 다 인터넷 없이 동작한다."

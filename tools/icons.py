@@ -18,7 +18,7 @@
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "static" / "images"
@@ -28,12 +28,19 @@ SRC_DIR = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/himesama/Downloads")
 INK = (14, 18, 17)
 PAPER = (234, 238, 236)
 
+# 선 굵히기 커널(px, 홀수). 원본 해상도 기준이라 결과물에서는 훨씬 얇게 보인다.
+THICKEN = 9
+
 
 def shape(path: Path) -> Image.Image:
     """선화를 알파 마스크로. 흰 배경 위에 합성한 뒤 명도를 뒤집는다."""
     im = Image.open(path).convert("RGBA")
     flat = Image.alpha_composite(Image.new("RGBA", im.size, (255,) * 4), im).convert("L")
     a = ImageOps.invert(flat).point(lambda v: 0 if v < 24 else min(255, int(v * 1.35)))
+    # 선을 한 겹 불린다. 원본 획이 가늘어서 마스트헤드 크기(약 30px)나 파비콘에서는
+    # 안티에일리어싱에 먹혀 흐려진다. MaxFilter 는 알파의 최댓값을 퍼뜨리므로
+    # 획이 두꺼워지고, 홀수 커널이라 중심이 안 밀린다.
+    a = a.filter(ImageFilter.MaxFilter(THICKEN))
     return a.crop(a.getbbox())
 
 
@@ -44,8 +51,11 @@ def write_mask(alpha: Image.Image, dst: Path, width: int) -> None:
     print(f"  {dst.relative_to(ROOT)}  {width}x{h}  {dst.stat().st_size // 1024}KB")
 
 
-def plate(alpha: Image.Image, size: int, bg: tuple, fg: tuple, pad=0.18) -> Image.Image:
-    """둥근 사각 판 위에 마크. 판이 불투명해야 탭에서 사라지지 않는다."""
+def plate(alpha: Image.Image, size: int, bg: tuple, fg: tuple, pad=0.05) -> Image.Image:
+    """둥근 사각 판 위에 마크. 판이 불투명해야 탭에서 사라지지 않는다.
+
+    여백은 거의 없다 — 파비콘은 16~32px 로 줄어들어서, 여백에 쓰는 1px 이
+    획에 쓰는 1px 보다 비싸다."""
     card = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     mask = Image.new("L", (size, size), 0)
     ImageDraw.Draw(mask).rounded_rectangle(
@@ -71,10 +81,12 @@ def main() -> int:
     write_mask(sqzer, IMG / "mark.png", 128)
     write_mask(shape(SRC_DIR / "sqzass_logo.png"), IMG / "projects" / "sqzass.png", 400)
 
-    # 밝은 탭 → 검은 판, 어두운 탭 → 흰 판. 어느 쪽에서도 대비가 남는다.
-    plate(sqzer, 64, INK, PAPER).save(IMG / "favicon.png", optimize=True)
-    plate(sqzer, 64, PAPER, INK).save(IMG / "favicon-dark.png", optimize=True)
-    plate(sqzer, 180, INK, PAPER).convert("RGB").save(IMG / "apple-touch-icon.png", optimize=True)
+    # 흰 판에 검은 선, 두 벌 다. 판이 불투명한 흰색이면 밝은 탭에서도 어두운
+    # 탭에서도 그대로 보이므로 변형을 나눌 이유가 없다 — 그래도 두 파일을 남기는
+    # 것은 media 로 고르는 <link> 를 그대로 두기 위해서다.
+    plate(sqzer, 128, PAPER, INK).save(IMG / "favicon.png", optimize=True)
+    plate(sqzer, 128, PAPER, INK).save(IMG / "favicon-dark.png", optimize=True)
+    plate(sqzer, 180, PAPER, INK).convert("RGB").save(IMG / "apple-touch-icon.png", optimize=True)
     for f in ("favicon.png", "favicon-dark.png", "apple-touch-icon.png"):
         print(f"  images/{f}  {(IMG / f).stat().st_size}B")
     return 0
