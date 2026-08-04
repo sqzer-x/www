@@ -24,8 +24,9 @@ ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "static" / "images"
 SRC_DIR = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/himesama/Downloads")
 
-INK = (16, 20, 26)
-PAPER = (232, 236, 241)
+# main.css 의 --ink / --bg 와 같은 값이어야 파비콘 판이 사이트와 같은 물건으로 보인다.
+INK = (14, 18, 17)
+PAPER = (234, 238, 236)
 
 
 def shape(path: Path) -> Image.Image:
