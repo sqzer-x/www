@@ -39,6 +39,8 @@ active       = "Active"
 copy         = "Copy"
 copied       = "Copied"
 
+elsewhere    = "Elsewhere"
+
 feed         = "Feed"
 sitemap      = "Sitemap"
 

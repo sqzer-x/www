@@ -12,6 +12,8 @@
     <p class="page-lede">{{ t("not_found_body") }}</p>
   </header>
 
+  <div class="fence" aria-hidden="true">+++</div>
+
   <nav class="btn-row" aria-label="{{ t("menu") }}">
     {%- for s in site.sections %}
     <a class="btn btn-ghost" href="{{ s.url }}">{{ s.title }}</a>

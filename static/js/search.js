@@ -29,10 +29,11 @@
   var loading = false;
   var cursor = -1;
 
-  /* 수정자 키를 읽는 사람의 것으로 바꿔 쓴다. 템플릿이 쓴 값은 JS 가 없을 때의 것. */
+  /* 단축키 힌트는 페이지의 성질이 아니라 읽는 사람 키보드의 성질이라 여기서 쓴다.
+     템플릿이 넣어 둔 값은 JS 가 없을 때 남는 것. */
   var mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   var kbd = trigger.querySelector("kbd");
-  if (kbd) kbd.textContent = mac ? "⌘ K" : "Ctrl K";
+  if (kbd) kbd.textContent = mac ? "⌘ /" : "Ctrl /";
 
   function load() {
     if (rows || loading) return Promise.resolve();
@@ -140,11 +141,18 @@
 
   trigger.addEventListener("click", open);
 
+  /* Ctrl/⌘ + /. e.code 가 아니라 e.key 로 잡는다 — 슬래시에 수정자가 필요한
+     레이아웃에서는 물리 키가 딴 데 있고, 중요한 건 읽는 사람이 무엇을 쳤는가다.
+     preventDefault 는 Firefox 가 맨 / 를 빠른 검색에 묶어 두기 때문이다. */
   document.addEventListener("keydown", function (e) {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-      e.preventDefault();
-      open();
+    if (!(e.ctrlKey || e.metaKey) || e.key !== "/") return;
+    /* 글을 치고 있는 중이면 끼어들지 않는다. */
+    var el = document.activeElement;
+    if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) {
+      if (el !== input) return;
     }
+    e.preventDefault();
+    dialog.open ? dialog.close() : open();
   });
 
   input.addEventListener("input", function () { render(input.value); });

@@ -20,6 +20,8 @@
     {%- endif %}
   </header>
 
+  <div class="fence" aria-hidden="true">+++</div>
+
   {%- if page.content %}
   <div class="prose prose-intro">{{ page.content | safe }}</div>
   {%- endif %}
@@ -65,9 +67,9 @@
       분류가 곧 저자의 편집 결정이 된다. #}
   {%- for g in page.extra.group %}
   <section id="{{ g.id }}">
-    <div class="wing"><h2>{{ g.label }}</h2></div>
+    <div class="room-head"><h2>{{ g.label }}</h2></div>
     {%- if g.note %}
-    <p class="wing-sub">{{ g.note }}</p>
+    <p class="room-head-sub">{{ g.note }}</p>
     {%- endif %}
 
     <div class="tiles">

@@ -1,8 +1,14 @@
-{#- 푸터. 위 내비와 같은 자료(site.sections)를 쓰므로 갈래가 늘어도 두 곳을
-    고칠 일이 없다. 콜로폰은 이 사이트가 무엇으로 만들어졌는지 한 줄로 말한다 —
-    자기 도구로 자기 사이트를 짓는 것 자체가 그 도구에 대한 주장이다. #}
+{#- 콜로폰. 갈래 링크는 위 내비와 같은 자료(site.sections)를 쓰므로 갈래가 늘어도
+    두 곳을 고칠 일이 없다.
+
+    소셜은 따로 선다. 왼쪽 갈래 링크는 이 사이트 안을 도는 것이고 오른쪽은 밖으로
+    나가는 것이라, 같은 줄에 섞으면 어느 쪽이 어디로 가는지 흐려진다.
+
+    마지막 줄은 이 사이트가 무엇으로 만들어졌는지 말한다 — 자기 도구로 자기 사이트를
+    짓는 것 자체가 그 도구에 대한 주장이다. #}
 {%- set ko = page.language == "ko" %}
 {%- set home = site.base_path ~ ("/ko/" if ko else "/") %}
+{% from "partials/icons.html" import i_github, i_instagram %}
 <footer class="colophon">
   <div class="colophon-in">
     <nav class="colophon-nav" aria-label="{{ t("menu") }}">
@@ -13,7 +19,13 @@
       <a href="{{ site.feed }}">{{ t("feed") }}</a>
       {%- endif %}
       <a href="{{ site.base_path }}/sitemap.xml">{{ t("sitemap") }}</a>
-      <a href="https://github.com/sqzer-x">GitHub</a>
+    </nav>
+
+    {#- rel="me" 는 이 계정들이 같은 사람이라는 선언이다. Mastodon 류가 이걸 읽고,
+        읽지 않는 곳에서도 틀린 말이 아니다. #}
+    <nav class="colophon-social" aria-label="{{ t("elsewhere") }}">
+      <a href="https://github.com/sqzer-x" rel="me" target="_blank">{{ i_github() }}<span>GitHub</span></a>
+      <a href="https://www.instagram.com/sqzer_x" rel="me" target="_blank">{{ i_instagram() }}<span>Instagram</span></a>
     </nav>
 
     <p class="colophon-note">
