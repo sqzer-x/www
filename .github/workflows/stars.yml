@@ -1,0 +1,41 @@
+name: Refresh stars
+
+# 별 개수는 front matter 에 구워 둔다 — 렌더 중에 네트워크를 부르면 재현되는
+# 빌드가 아니게 되고, 브라우저에서 부르면 익명 API 한도(IP 당 60/시간)에
+# 걸린다. 대신 하루 한 번 여기서 갱신하고, 바뀐 게 있을 때만 커밋한다.
+# 커밋이 나가면 pages.yml 이 이어서 돌아 배포한다.
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stars
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Fetch counts
+        env:
+          # gh 가 인증되면 한도가 5000/시간이라 프로젝트가 늘어도 안 걸린다.
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/stars.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet; then
+            echo "변동 없음"
+            exit 0
+          fi
+          git config user.name "sqzer"
+          git config user.email "110329244+sqzer-x@users.noreply.github.com"
+          git commit -am "Refresh star counts"
+          git push

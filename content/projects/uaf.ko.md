@@ -13,6 +13,8 @@ lang     = "Python"
 license  = ""
 version  = ""
 platform = "Linux"
+repo     = "https://github.com/sqzer-x/uaf"
+stars     = 0
 mark     = ""
 logo     = ""
 

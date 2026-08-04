@@ -6,7 +6,7 @@ template = "about.html"
 
 [extra]
 portrait     = "images/profile.jpg"
-portrait_alt = "sqzer-x"
+portrait_alt = "sqzer"
 
 # 개인적인 세부(이름, 소속, 사는 곳, 이력)는 일부러 비워 두었다. 지어내는 것보다
 # 없는 편이 낫고, 채우는 건 본인만 할 수 있다.

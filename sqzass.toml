@@ -1,4 +1,4 @@
-title            = "sqzer-x"
+title            = "sqzer"
 description      = "Terminal tools, static site tooling, and offensive security utilities."
 base_url         = "https://sqzer.com"
 default_language = "en"

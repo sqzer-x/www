@@ -1,4 +1,4 @@
-{#- 소개. 초상이 붙는다는 점만 page.html 과 다르다.
+{#- 소개. 초상이 제목 위에 선다.
 
     초상을 마크다운 본문에 넣지 않는 이유: 본문 안에 있으면 문단 사이에 끼어
     흐름을 끊고, 폭과 비율을 문서마다 다시 정해야 한다. 머리에 두면 자리가
@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="wrap wrap-read">
-  <header class="page-head about-head" data-reveal>
+  <header class="page-head about-head">
     {%- if page.extra.portrait %}
     {#- alt 는 사람을 말한다. 장식이 아니라 "누구인지"가 이 페이지의 내용이다. #}
     <figure class="portrait">
@@ -15,12 +15,10 @@
            width="720" height="900" loading="eager" decoding="async">
     </figure>
     {%- endif %}
-    <div class="about-intro">
-      <h1 class="page-title">{{ page.title }}</h1>
-      {%- if page.description %}
-      <p class="page-lede">{{ page.description }}</p>
-      {%- endif %}
-    </div>
+    <h1 class="page-title">{{ page.title }}</h1>
+    {%- if page.description %}
+    <p class="page-lede">{{ page.description }}</p>
+    {%- endif %}
   </header>
 
   <div class="prose">

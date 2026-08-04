@@ -13,6 +13,8 @@ lang     = "PowerShell"
 license  = ""
 version  = ""
 platform = "Windows"
+repo     = "https://github.com/sqzer-x/udfx"
+stars     = 0
 mark     = ""
 logo     = ""
 

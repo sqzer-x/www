@@ -48,6 +48,10 @@
 {%- endif %}
 <meta name="twitter:card" content="summary">
 
+{#- 라틴 서브셋만 미리 받는다. 한글 파일은 unicode-range 뒤에 있어서 한글이
+    한 글자도 없는 페이지는 애초에 받지 않는데, preload 는 그 판단을 건너뛰므로
+    여기 넣으면 영문 페이지가 쓰지도 않을 116KB 를 받는다. #}
+<link rel="preload" href="{{ asset("fonts/display-latin.woff2") }}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset("css/main.css") }}">
 {%- if site.highlight_css %}
 <link rel="stylesheet" href="{{ site.highlight_css }}">

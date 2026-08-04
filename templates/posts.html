@@ -16,6 +16,6 @@
   <div class="prose prose-intro">{{ page.content | safe }}</div>
   {%- endif %}
 
-  {{ ledger(page.children, 0, true, 0) }}
+  {{ ledger(page.children, 0, true, 0, page.language) }}
 </div>
 {% endblock %}

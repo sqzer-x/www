@@ -28,6 +28,7 @@ cover = ""
 blurb = "A static site generator that refuses to publish a broken reference."
 site  = "https://sqzass.sqzer.com"
 repo  = "https://github.com/sqzer-x/sqzass"
+stars  = 0
 
 [[extra.featured]]
 url   = "/projects/ommp/"
@@ -38,6 +39,7 @@ cover = "images/projects/ommp-cover.png"
 blurb = "A terminal music player with no daemon to start and nothing left running."
 site  = "https://ommp.sqzer.com"
 repo  = "https://github.com/sqzer-x/ommp"
+stars  = 0
 
 [[extra.group]]
 id = "terminal"
@@ -48,19 +50,23 @@ note = ""
   url = "/projects/sqzass/"
   name = "sqzass"
   blurb = "Static site generator. Two builds of the same input are byte-identical."
+  mark = "images/projects/sqzass.png"
   lang = "Rust"
   status = "active"
   site = "https://sqzass.sqzer.com"
   repo = "https://github.com/sqzer-x/sqzass"
+  stars = 0
 
   [[extra.group.item]]
   url = "/projects/ommp/"
   name = "ommp"
   blurb = "Terminal music player. No MPD, no daemon — run it and play."
+  mark = ""
   lang = "Rust"
   status = "active"
   site = "https://ommp.sqzer.com"
   repo = "https://github.com/sqzer-x/ommp"
+  stars = 0
 
 # uaf / udfx / usfx 는 이름이 우연히 닮은 것이 아니다. 정찰 대상이 AP, 도메인,
 # 서브도메인으로 갈라지는 한 계열이고, 셋 다 인터넷이 없는 망에서 도는 것을
@@ -74,28 +80,34 @@ note = "Three finders, one for each layer an internal network hides things at. A
   url = "/projects/uaf/"
   name = "uaf"
   blurb = "Ultimate AP Finder. Wireless AP discovery and classification for PCI-DSS audits."
+  mark = ""
   lang = "Python"
   status = "active"
   site = ""
   repo = "https://github.com/sqzer-x/uaf"
+  stars = 0
 
   [[extra.group.item]]
   url = "/projects/udfx/"
   name = "udfx"
   blurb = "Ultimate Domain Finder X. Pulls every DNS record out of Active Directory over LDAP."
+  mark = ""
   lang = "PowerShell"
   status = "active"
   site = ""
   repo = "https://github.com/sqzer-x/udfx"
+  stars = 0
 
   [[extra.group.item]]
   url = "/projects/usfx/"
   name = "usfx"
   blurb = "Ultimate Subdomain Finder X. Twelve enumeration modules, none of which phone home."
+  mark = ""
   lang = "Python"
   status = "active"
   site = ""
   repo = "https://github.com/sqzer-x/usfx"
+  stars = 1
 
 [[extra.group]]
 id = "apps"
@@ -106,8 +118,10 @@ note = ""
   url = "/projects/doomsday/"
   name = "doomsday"
   blurb = "A GNOME Shell extension that counts down to the dates you care about."
+  mark = ""
   lang = "JavaScript"
   status = "active"
   site = ""
   repo = "https://github.com/sqzer-x/doomsday"
+  stars = 0
 +++

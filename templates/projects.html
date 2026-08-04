@@ -1,18 +1,19 @@
-{#- Projects 인덱스. 이 사이트에서 가장 많은 것을 말하는 페이지다.
+{#- Projects. 이 사이트에서 가장 많은 것을 말하는 페이지다.
 
-    카탈로그는 이 페이지의 [extra] 에 산다. 목록(PageRefCtx)은 title·description·
-    url·weight·date 만 실어 오므로 언어 배지나 링크는 거기서 나올 수 없다.
-    대신 모든 url 이 실제 페이지를 가리켜야 하고, 그 대응은 CI 가 검사한다 —
-    [extra] 안의 URL 은 빌드가 확인해 주지 않는 유일한 참조다.
+    목록이 아니라 갤러리다. 위에 액자 몇 점, 그 아래 갈래마다 가운데 정렬
+    타일 벽. 행과 구분선이 아니라 타일과 여백이 나눈다.
 
-    스키마는 총체적이다. 없는 값은 "" 나 [] 이고 키를 빼지 않는다. 정의되지 않은
-    접근이 빌드 에러라, 키가 빠지면 그 프로젝트 한 줄이 아니라 사이트가 안 나온다. #}
+    카탈로그는 이 페이지의 [extra] 에 산다. 목록(PageRefCtx)은 title·
+    description·url·weight·date 만 실어 오므로 언어 배지와 링크는 거기서 나올
+    수 없다. 대신 모든 url 이 실제 페이지를 가리켜야 하고 CI 가 그걸 검사한다.
+
+    스키마는 총체적이다. 없는 값은 "" 나 [] 이고 키를 빼지 않는다. #}
 {% extends "base.html" %}
-{% from "partials/icons.html" import i_site, i_repo, i_out %}
+{% from "partials/icons.html" import i_site, i_repo %}
 
 {% block content %}
 <div class="wrap">
-  <header class="page-head" data-reveal>
+  <header class="page-head">
     <h1 class="page-title">{{ page.title }}</h1>
     {%- if page.description %}
     <p class="page-lede">{{ page.description }}</p>
@@ -23,82 +24,77 @@
   <div class="prose prose-intro">{{ page.content | safe }}</div>
   {%- endif %}
 
-  {#- 골라 둔 것. 큰 카드는 넉 장까지가 한 줄에 맞는다. flex 로 두면 셋이든
-      넷이든 마지막 줄에 하나만 남는 일이 없다. #}
+  {#- 골라 둔 것. 액자에는 테두리가 없고 그림에만 있다. #}
   {%- if page.extra.featured %}
-  <section class="bento" aria-label="{{ t("selected") }}">
+  <section class="frames" aria-label="{{ t("selected") }}">
     {%- for p in page.extra.featured %}
-    <article class="bento-card" data-reveal>
-      {#- 카드 그림은 세 갈래이고 상세 페이지의 메달리온과 같은 규칙이다.
-          커버 사진 → 마크(선화) → 이름. 뒤로 갈수록 조용해질 뿐 자리는 같다. #}
-      <div class="bento-media">
+    <article class="frame">
+      <a class="frame-media" href="{{ p.url }}" aria-hidden="true" tabindex="-1">
         {%- if p.cover %}
         <img src="{{ asset(p.cover) }}" alt="" loading="lazy" decoding="async">
         {%- elif p.mark %}
-        <span class="bento-mark" aria-hidden="true" style="--mark-src: url('/{{ p.mark }}')"></span>
+        <span class="frame-mark" style="--mark-src: url('/{{ p.mark }}')"></span>
         {%- else %}
-        <span class="bento-glyph" aria-hidden="true">{{ p.name }}</span>
+        {#- 아직 그림이 없는 자리. 회색으로 때우지 않고 비었다고 말한다. #}
+        <span class="noimg"></span>
         {%- endif %}
-      </div>
-      <div class="bento-body">
-        <h2 class="bento-name">
-          <a href="{{ p.url }}">{{ p.name }}</a>
-        </h2>
-        <p class="bento-blurb">{{ p.blurb }}</p>
-        <div class="bento-meta">
-          <span class="tag tag-lang">{{ p.lang }}</span>
-          <span class="bento-links">
-            {%- if p.site %}
-            <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t("website") }}" title="{{ t("website") }}">{{ i_site() }}</a>
-            {%- endif %}
-            {%- if p.repo %}
-            <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t("source") }}" title="{{ t("source") }}">{{ i_repo() }}</a>
-            {%- endif %}
-          </span>
-        </div>
+      </a>
+      <h2 class="frame-title">
+        {%- if p.mark %}<span class="chip-mark" style="--mark-src: url('/{{ p.mark }}')" aria-hidden="true"></span>{% endif %}
+        <a href="{{ p.url }}">{{ p.name }}</a>
+      </h2>
+      <p class="frame-blurb">{{ p.blurb }}</p>
+      <div class="frame-meta">
+        <span class="lang">{{ p.lang }}</span>
+        {%- if p.repo %}
+        <span class="lang stars">{{ p.stars }} ★</span>
+        {%- endif %}
+        {%- if p.site %}
+        <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}">{{ i_site() }}</a>
+        {%- endif %}
+        {%- if p.repo %}
+        <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}">{{ i_repo() }}</a>
+        {%- endif %}
       </div>
     </article>
     {%- endfor %}
   </section>
   {%- endif %}
 
-  {#- 갈래별 목록. 순서는 TOML 에 적힌 순서 그대로다 — taxonomy 가 없는 대신
+  {#- 갈래별 타일 벽. 순서는 TOML 에 적힌 그대로다 — taxonomy 가 없는 대신
       분류가 곧 저자의 편집 결정이 된다. #}
   {%- for g in page.extra.group %}
-  <section class="group" id="{{ g.id }}" data-reveal>
-    <div class="plate">
-      <h2 class="plate-label">{{ g.label }}</h2>
-      <span class="plate-rule" aria-hidden="true"></span>
-      <span class="plate-count">{{ g.item | length }}</span>
-    </div>
+  <section id="{{ g.id }}">
+    <div class="wing"><h2>{{ g.label }}</h2></div>
     {%- if g.note %}
-    <p class="group-note">{{ g.note }}</p>
+    <p class="wing-sub">{{ g.note }}</p>
     {%- endif %}
 
-    <ul class="rows">
+    <div class="tiles">
       {%- for p in g.item %}
-      <li class="row is-{{ p.status }}">
-        <a class="row-main" href="{{ p.url }}">
-          <span class="row-name">{{ p.name }}</span>
-          <span class="row-blurb">{{ p.blurb }}</span>
-        </a>
-        <span class="row-meta">
-          <span class="tag tag-lang">{{ p.lang }}</span>
-          {#- 상태는 점 하나다. 색이 뜻을 지므로 라벨은 스크린리더에게만 준다. #}
-          <span class="dot" aria-hidden="true"></span>
-          <span class="sr-only">{{ t("archived") if p.status == "archived" else t("active") }}</span>
-        </span>
-        <span class="row-links">
+      <article class="tile">
+        <h3 class="tile-title">
+          {%- if p.mark %}<span class="chip-mark" style="--mark-src: url('/{{ p.mark }}')" aria-hidden="true"></span>{% endif %}
+          <a class="tile-link" href="{{ p.url }}">{{ p.name }}</a>
+        </h3>
+        <p class="tile-blurb">{{ p.blurb }}</p>
+        <p class="tile-meta">
+          <span class="lang">{{ p.lang }}</span>
+          {%- if p.repo %}
+          <span class="stars">{{ p.stars }} ★</span>
+          {%- endif %}
+        </p>
+        <p class="tile-links">
           {%- if p.site %}
-          <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}" title="{{ t("website") }}">{{ i_site() }}</a>
+          <a href="{{ p.site }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("website") }}">{{ i_site() }}</a>
           {%- endif %}
           {%- if p.repo %}
-          <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}" title="{{ t("source") }}">{{ i_repo() }}</a>
+          <a href="{{ p.repo }}" target="_blank" rel="noopener noreferrer" aria-label="{{ p.name }} — {{ t("source") }}">{{ i_repo() }}</a>
           {%- endif %}
-        </span>
-      </li>
+        </p>
+      </article>
       {%- endfor %}
-    </ul>
+    </div>
   </section>
   {%- endfor %}
 </div>

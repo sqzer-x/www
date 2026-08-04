@@ -13,6 +13,8 @@ lang     = "Python"
 license  = ""
 version  = "1.2.0"
 platform = "Cross-platform"
+repo     = "https://github.com/sqzer-x/usfx"
+stars     = 1
 mark     = ""
 logo     = ""
 

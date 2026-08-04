@@ -13,6 +13,8 @@ lang     = "Rust"
 license  = "Apache-2.0"
 version  = ""
 platform = "Linux"
+repo     = "https://github.com/sqzer-x/ommp"
+stars     = 0
 mark     = ""
 logo     = ""
 
