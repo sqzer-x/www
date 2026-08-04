@@ -472,14 +472,9 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
   max-width: 44ch; color: var(--ink-2); text-wrap: pretty;
 }
 
-/* 첫 화면에서는 언어 줄이 문 위에 선다. 문 뒤에 붙이면 가운데 정렬 스택에서
-   한 줄이 통째로 접힌 자리 아래로 내려간다. 문의 margin-top 이 이 줄에 맞춰
-   깎여 있으므로(clamp(0.85rem…)), 두 값은 함께 고쳐야 한다. */
-.hero-home .page-meta { margin-top: clamp(1.3rem, 3vw, 1.9rem); }
-
 /* 문. 채운 알약이 아니라 밑줄 그은 라벨이다. */
 .door {
-  display: inline-block; margin-top: clamp(0.85rem, 1.8vw, 1.15rem);
+  display: inline-block; margin-top: clamp(1.8rem, 4vw, 2.75rem);
   padding-bottom: 0.35rem;
   font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--ink-2);

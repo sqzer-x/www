@@ -7,7 +7,6 @@
     카피는 전부 [extra] 에 있고 이 파일은 구조만 안다. #}
 {% extends "base.html" %}
 {% from "partials/ledger.html" import ledger %}
-{% from "partials/lang.html" import lang_switch %}
 
 {% block content %}
 {%- set ko = page.language == "ko" %}
@@ -20,11 +19,6 @@
     {%- if page.extra.hero_sub %}
     <p class="statement-sub" data-rise="2">{{ page.extra.hero_sub }}</p>
     {%- endif %}
-    {#- 홈에도 둔다. 참조 사이트는 홈에서 이걸 빠뜨렸는데, 영어 첫 화면에 도착한
-        사람에게 한국어로 가는 길이 사이트 전체에 하나도 없다는 뜻이 된다.
-        문보다 **앞에** 세우는 이유는 히어로가 가운데 정렬이라서다 — 뒤에 붙이면
-        한 줄만큼이 통째로 접힌 자리 아래로 내려가고, 문까지 같이 밀린다. #}
-    <div class="page-meta" data-rise="3">{{ lang_switch(page) }}</div>
     <a class="door" href="{{ home }}about/" data-rise="3">{{ page.extra.hero_door }}</a>
   </div>
 </section>

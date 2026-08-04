@@ -9,7 +9,6 @@
 
     스키마는 총체적이다. 없는 값은 "" 나 [] 이고 키를 빼지 않는다. #}
 {% extends "base.html" %}
-{% from "partials/lang.html" import lang_switch %}
 {% from "partials/icons.html" import i_site, i_repo %}
 
 {% block content %}
@@ -19,7 +18,6 @@
     {%- if page.description %}
     <p class="page-lede">{{ page.description }}</p>
     {%- endif %}
-    <div class="page-meta">{{ lang_switch(page) }}</div>
   </header>
 
   <div class="fence" aria-hidden="true">+++</div>

@@ -1,7 +1,6 @@
 {#- 글 목록. 섹션이 `sort_by = "date"` 라 최신순이고, 이제 목록 항목이 자기
     날짜를 실어 오므로 그 순서의 근거가 화면에 보인다. #}
 {% extends "base.html" %}
-{% from "partials/lang.html" import lang_switch %}
 {% from "partials/ledger.html" import ledger %}
 
 {% block content %}
@@ -11,7 +10,6 @@
     {%- if page.description %}
     <p class="page-lede">{{ page.description }}</p>
     {%- endif %}
-    <div class="page-meta">{{ lang_switch(page) }}</div>
   </header>
 
   <div class="fence" aria-hidden="true">+++</div>
