@@ -721,6 +721,9 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
   font-weight: var(--w-item); letter-spacing: var(--track-set); line-height: 1.25;
   color: var(--ink-2); transition: color var(--tr-ink); text-wrap: balance;
+  /* 홈의 글 갈래가 넓은 방으로 옮겨 가면서 이 열이 1080px 까지 열렸다. 제목은
+     한 줄로 읽는 물건이라 폭에 상한이 필요하다 — 설명(58ch)에는 이미 있었다. */
+  max-width: 42ch;
 }
 .ledger-link:hover .ledger-title { color: var(--ink); }
 .ledger-desc {
@@ -776,7 +779,9 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .feature-label {
   display: flex; flex-direction: column; justify-content: center;
   gap: 1.15rem; min-width: 0;
-  padding: clamp(1.5rem, 3.4vw, 3.2rem);
+  /* 상한은 카드가 자라기를 멈추는 폭(.wrap 이 71rem 에 닿는 1349px)에서 함께
+     닿는다. 더 늦게 잡으면 상자는 그대로인데 여백만 계속 자란다. */
+  padding: clamp(1.5rem, 3.4vw, 2.4rem);
 }
 .feature-date {
   font-family: var(--mono); font-size: 0.7rem;
@@ -789,9 +794,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   font-size: clamp(1.4rem, 1.15rem + 1.35vw, 2.35rem);
   font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.2;
   color: var(--ink-2); transition: color var(--tr-ink);
-  /* balance 가 아니라 pretty 다. balance 는 줄 수를 최소로 맞추려 해서 제목이
-     한 줄에 붙는데, 이 덩이의 무게는 제목이 두 줄로 앉을 때 나온다. */
-  text-wrap: pretty;
+  /* 이 시트의 모든 제목이 balance 다. 한때 여기만 pretty 로 바꿔 두고 "balance 는
+     제목을 한 줄로 붙인다"고 적었는데, 재 보니 39자 제목에서 둘 다 세 줄이고
+     balance 쪽이 줄 길이만 고르게 맞춘다. 틀린 이유로 예외를 만들 뻔했다. */
+  text-wrap: balance;
 }
 .feature:hover .feature-title { color: var(--ink); }
 .feature-desc { margin: 0; max-width: 38ch; font-size: 0.96rem; color: var(--ink-3); text-wrap: pretty; }
@@ -806,7 +812,9 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   border-bottom: 1px solid var(--rule-2);
   transition: color var(--tr-ink), border-color var(--tr-ink);
 }
-.feature:hover .feature-cta { color: var(--ink-2); border-bottom-color: var(--accent); }
+/* 밑줄은 잉크 사다리에서 한 단만 오른다. 액센트는 이 카드에 하나뿐이고 날짜가
+   그걸 갖는다 — 위 규칙에 그렇게 적어 놓고 여기서 두 번째를 켰었다. */
+.feature:hover .feature-cta { color: var(--ink-2); border-bottom-color: var(--rule-3); }
 
 /* 좁아지면 그림이 위로 올라간다. 옆으로 두면 두 칸 다 못 쓸 만큼 좁아진다. */
 @media (max-width: 46rem) {
