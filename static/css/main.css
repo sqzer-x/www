@@ -438,7 +438,7 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 }
 .room-head h2 {
   margin: 0; flex: none;
-  font-size: clamp(1.35rem, 1.15rem + 0.9vw, 1.7rem);
+  font-size: clamp(1.05rem, 0.95rem + 0.55vw, 1.3rem);
   font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.2;
 }
 /* 남는 자리를 전부 먹는다. 문이 없는 갈래(프로젝트 묶음)에서는 끝까지 간다. */
@@ -777,12 +777,12 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
     transparent 100%);
 }
 .mtile-title {
-  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.35rem);
+  font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.05rem);
   font-weight: var(--w-item); letter-spacing: var(--track-set);
   color: var(--ink);
 }
 .mtile-blurb {
-  max-width: 44ch; font-size: 0.88rem; line-height: 1.5;
+  max-width: 44ch; font-size: 0.8rem; line-height: 1.5;
   color: var(--ink-2); text-wrap: pretty;
 }
 .mtile-stars {
@@ -791,7 +791,14 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   font-variant-numeric: tabular-nums; color: var(--ink-3);
 }
 /* 큰 장은 글도 한 단 크다 — 크기가 순서를 말한다. */
-.mosaic > :first-child .mtile-title { font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem); }
+.mosaic > :first-child .mtile-title { font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem); }
+
+/* 여기서부터 작은 장의 키는 글이 정한다. 비율을 고정해 두면 폭이 줄면서 상자가
+   글보다 먼저 작아져 잘린다 — 카드에서 겪은 것과 같은 어긋남이다. 그림은 어차피
+   잘리는 물건이므로 여기서는 글이 이기게 둔다. 큰 장은 셋의 합만큼 자란다. */
+@media (max-width: 72rem) {
+  .mosaic > :not(:first-child) { aspect-ratio: auto; }
+}
 
 /* 좁아지면 한 열로 쌓고 전부 같은 비율이 된다. 두 열로 두면 작은 장이 글을
    담기에 좁아진다. */
