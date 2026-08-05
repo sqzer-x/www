@@ -33,6 +33,15 @@
   {%- for p in s.pages %}
   {%- if loop.first %}
   <a class="feature" href="{{ p.url }}">
+    {#- 미리보기가 있으면 액자가 먼저 선다. poster 만 먼저 오고 영상은 preload="none"
+        이라, 손이 닿기 전에는 한 바이트도 안 받는다. 재생은 ui.js 가 건다. #}
+    {%- for m in page.extra.preview %}
+    {%- if m.url == p.url %}
+    <video class="feature-media" poster="{{ asset(m.poster) }}" src="{{ asset(m.video) }}"
+           width="960" height="540" muted loop playsinline preload="none"
+           aria-hidden="true" tabindex="-1"></video>
+    {%- endif %}
+    {%- endfor %}
     {%- if p.date %}
     <time class="feature-date" datetime="{{ p.date.date }}">{{ p.date.year }}</time>
     {%- endif %}

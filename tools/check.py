@@ -74,6 +74,27 @@ def check_projects():
             fails.append(f"[{lang}] 페이지가 카탈로그에 없습니다: {url}")
 
 
+def check_preview():
+    """홈의 미리보기 카탈로그가 실제 글을 가리키는지.
+
+    이것도 [extra] 라 생성기가 안 읽는다. url 이 어긋나면 에러가 아니라 그냥
+    미리보기가 안 나오고, 그건 배포된 뒤에야 눈으로만 보인다.
+    """
+    for lang, prefix in LANGS.items():
+        index = ROOT / "content" / ("_index.ko.md" if lang == "ko" else "_index.md")
+        if not index.exists():
+            continue  # 그 언어에 첫 화면이 없을 수 있다. 한국어가 그렇다.
+        for item in front_matter(index).get("extra", {}).get("preview", []):
+            url = item["url"]
+            slug = url.rstrip("/").rsplit("/", 1)[-1]
+            suffix = ".ko.md" if lang == "ko" else ".md"
+            if not (ROOT / "content" / "posts" / f"{slug}{suffix}").exists():
+                fails.append(f"[{lang}] 미리보기가 가리키는 글이 없습니다: {url}")
+            for key in ("poster", "video"):
+                if not (ROOT / "static" / item[key]).exists():
+                    fails.append(f"[{lang}] 미리보기 {key} 파일이 없습니다: {item[key]}")
+
+
 def check_i18n():
     """두 언어의 키 집합이 같은지. 다르면 그 키를 처음 쓰는 날 빌드가 선다."""
     keys = {}
@@ -118,6 +139,7 @@ def check_links():
 
 
 check_projects()
+check_preview()
 check_i18n()
 check_links()
 

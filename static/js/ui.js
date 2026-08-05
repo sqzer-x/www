@@ -79,6 +79,38 @@
     });
   }
 
+  /* ---------- feature preview ---------- */
+
+  /* 홈 맨 위 글의 미리보기. 손이 닿거나 포커스가 오면 돌고, 떠나면 첫 프레임으로
+     되감는다 — 그 프레임이 곧 poster 라 되돌아간 자리가 원래 자리다.
+
+     영상은 preload="none" 이라 여기서 play() 를 부르기 전에는 한 바이트도 받지
+     않는다. 첫 화면에 700KB 를 얹지 않으려는 것이고, 그래서 이 파일이 못 와도
+     남는 것은 정지 그림 한 장이다.
+
+     동작을 줄이라는 설정이면 아무것도 걸지 않는다. 이 사이트에서 저절로 움직이는
+     것은 이것 하나뿐이라, 끄라고 한 사람에게는 없는 것과 같아야 한다. */
+  var feature = document.querySelector(".feature");
+  var clip = feature && feature.querySelector(".feature-media");
+  if (clip && !reduced) {
+    var play = function () {
+      var p = clip.play();
+      /* 자동재생이 막히면 거절된 프로미스가 콘솔에 빨간 줄을 남긴다. 미리보기가
+         안 도는 것은 고장이 아니라 브라우저의 정책이므로 조용히 삼킨다. */
+      if (p && p.catch) p.catch(function () {});
+    };
+    var stop = function () {
+      clip.pause();
+      clip.currentTime = 0;
+    };
+    feature.addEventListener("mouseenter", play);
+    feature.addEventListener("mouseleave", stop);
+    /* 키보드로 온 사람도 같은 것을 본다. 미리보기가 링크 하나에 붙어 있으므로
+       포커스가 곧 "지금 이걸 보고 있다"는 뜻이다. */
+    feature.addEventListener("focus", play);
+    feature.addEventListener("blur", stop);
+  }
+
   /* ---------- reading rail ---------- */
 
   /* 넓은 화면에서 오른쪽 가장자리에 서는 목차. 항목마다 세로 헤어라인 한 칸이고,
