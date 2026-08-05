@@ -1205,7 +1205,11 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
        침범한다.
        ponytail: 여기 걸리는 제목이 잦아지면 breakpoint 를 84rem 으로 올려 이름
        열을 넓히는 쪽이 먼저다. 글자 크기를 줄이는 건 그다음. */
-    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+    /* 두 줄까지. -webkit-line-clamp 를 쓰지 않는 이유는 카드 제목과 같다 — 이
+       조합에서 display 가 flow-root 로 계산돼 clamp 가 죽고 overflow 만 남으면,
+       상자가 line-height 만큼이라 글자 줄상자(1.44em)의 아래가 잘린다. */
+    max-height: calc(2 * 1.35em + 0.12em);
+    padding-bottom: 0.12em;
     overflow: hidden;
     font-size: 0.72rem; line-height: 1.35;
     /* 13.7px 글자다. --ink-3 은 라이트에서 4.23:1 로 AA 아래이고, 여기서 쓰던
