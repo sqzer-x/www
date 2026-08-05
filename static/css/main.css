@@ -501,7 +501,9 @@ main { display: block; padding-bottom: clamp(5rem, 12vw, 9rem); }
 
 /* ---------- home rooms ---------- */
 
-.room { padding-block: 0; }
+/* 홈의 갈래는 .wrap 보다 좁다. 1440 에서 1102px — 참조 카드(1123)와 같은 자리다.
+   머리도 카드도 타일도 이 폭을 쓰므로 셋의 왼쪽 끝과 오른쪽 끝이 같다. */
+.room { max-width: calc(58rem + 2 * var(--gutter)); padding-block: 0; }
 
 /* 갈래의 위 여백은 그 갈래의 첫 물건이 진다. 전에는 언제나 머리가 졌는데,
    글 갈래에서는 머리가 카드 뒤로 갔다. */
@@ -779,6 +781,11 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
      여기 비율을 걸어 두면 이름표가 행을 늘리지 못하고, 그림은 자기 칸을 채우기만
      하면 되므로 aspect-ratio 를 따로 갖지 않는다. */
   aspect-ratio: 8 / 3;
+  /* 이 카드 안의 크기는 창이 아니라 **카드**를 따른다. 아래 cqw 가 그 단위다.
+     창에 매달았더니 카드는 좁아지는데 글자는 그만큼 안 줄어서, 920px 근처에서
+     제목의 디센더와 설명 둘째 줄이 상자 밖으로 밀려 잘렸다. 상자와 글자가 같은
+     수에 매여 있으면 그 어긋남이 생길 자리가 없다. */
+  container-type: inline-size;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   overflow: hidden;
@@ -817,13 +824,10 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 
 .feature-label {
   display: flex; flex-direction: column; justify-content: center;
-  gap: 1.15rem; min-width: 0;
-  /* 상자가 고정이므로 넘칠 수 있는 쪽은 글이다. 아래 줄 수 제한이 그걸 막고,
-     이건 그래도 남는 경우의 마지막 방어선이다. */
+  gap: clamp(0.7rem, 1.9cqw, 1.2rem); min-width: 0;
+  /* 상자가 고정이므로 넘칠 수 있는 쪽은 글이다. 마지막 방어선. */
   overflow: hidden;
-  /* 상한은 카드가 자라기를 멈추는 폭(.wrap 이 71rem 에 닿는 1349px)에서 함께
-     닿는다. 더 늦게 잡으면 상자는 그대로인데 여백만 계속 자란다. */
-  padding: clamp(1.5rem, 3.4vw, 2.4rem);
+  padding: clamp(1.1rem, 3.8cqw, 2.4rem);
 }
 .feature-date {
   font-family: var(--mono); font-size: 0.7rem;
@@ -833,12 +837,12 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .feature:hover .feature-date { color: var(--accent); }
 .feature-title {
   margin: 0;
-  /* 1440 에서 49.4px. 이 폭에서 이름표의 측정폭은 402px 이고 지금 제목이 396px 을
-     차지한다 — 제목이 자기 열을 꽉 채우는 것이 참조 카드가 헤드라인처럼 읽히는
-     이유이고(그쪽은 353 중 353), 그 성질을 숫자로 맞춘 값이다.
-     더 키우면 두 줄이 되는데, 15자짜리 제목이 꺾이는 건 억지로 보인다. 제목이
-     길어지면 알아서 꺾이고 그때는 카드가 같이 자란다. */
-  font-size: clamp(1.5rem, 1.15rem + 1.95vw, 2.6rem);
+  /* 카드 폭의 3.7% — 1102px 카드에서 40.8px 이고, 이름표의 측정폭 353px 중
+     제목이 약 306px 을 쓴다. 제목이 자기 열을 거의 채우는 것이 이 카드가
+     헤드라인처럼 읽히는 이유다(참조는 353 중 353).
+     cqw 라 카드가 좁아지면 글자도 같은 비율로 좁아진다. rem 하한은 아주 좁은
+     카드에서 읽히는 크기의 바닥이다. */
+  font-size: clamp(1.25rem, 3.7cqw, 2.3rem);
   font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.2;
   color: var(--ink-2); transition: color var(--tr-ink);
   /* 세 줄까지. 1440 에서 이름표 안쪽이 372px 이고 날짜·설명·문·간격이 125px 을
@@ -859,7 +863,8 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 }
 .feature:hover .feature-title { color: var(--ink); }
 .feature-desc {
-  margin: 0; max-width: 38ch; font-size: 0.96rem; color: var(--ink-3); text-wrap: pretty;
+  margin: 0; max-width: 38ch; color: var(--ink-3); text-wrap: pretty;
+  font-size: clamp(0.85rem, 1.65cqw, 1rem);
   /* 두 줄까지. 줄 간격이 1.65em 이라 글자 줄상자(1.44em)보다 넉넉해서 여기는
      따로 자리를 만들 필요가 없다. */
   line-height: 1.65;
