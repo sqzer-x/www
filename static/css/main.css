@@ -734,12 +734,22 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 /* 작은 장의 키를 여기서 정한다. 큰 장은 셋의 합만큼 자라므로 자기 비율이 없다. */
 .mosaic > :not(:first-child) { aspect-ratio: 2.1 / 1; }
 
-/* 바탕. 그림이 있으면 그림이, 없으면 그 프로젝트의 색이 옅게 깔린다. */
+/* 바탕. 그림이 있으면 그림이, 없으면 그 프로젝트의 색이 깔린다.
+
+   평상시에는 색이 빠져 있고 손이 닿으면 돌아온다. 이 시트의 첫 줄에 적힌
+   전제가 그것이다 — "색은 평상시에 없고 손이 닿을 때만 나온다". 그림에까지
+   그 규칙을 적용한 것이고, 크기나 자리는 그대로이므로 hover 가 색만 바꾼다는
+   규칙도 지켜진다. 박자는 이 시트의 유일한 박자다.
+   (한때 이 탈색을 걷어냈던 적이 있다. 그때는 참조에서 그대로 가져온 값이라
+   뺐고, 지금은 이 사이트의 전제를 그림까지 밀고 간 것이라 뜻이 다르다.) */
 .mtile-art {
   position: absolute; inset: 0;
   display: grid; place-items: center;
   background: color-mix(in srgb, var(--tint) 30%, var(--bg-2));
+  filter: grayscale(1);
+  transition: filter var(--tr-ink);
 }
+.mtile:hover .mtile-art, .mtile:focus-visible .mtile-art { filter: grayscale(0); }
 .mtile-art img { width: 100%; height: 100%; object-fit: cover; }
 /* 마크는 잉크가 아니라 그 프로젝트의 색을 진하게 쓴 것이다 — 바탕과 같은 색의
    두 단이라 한 물건으로 읽힌다. */
@@ -774,6 +784,11 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .mtile-blurb {
   max-width: 44ch; font-size: 0.88rem; line-height: 1.5;
   color: var(--ink-2); text-wrap: pretty;
+}
+.mtile-stars {
+  margin-top: 0.15rem;
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums; color: var(--ink-3);
 }
 /* 큰 장은 글도 한 단 크다 — 크기가 순서를 말한다. */
 .mosaic > :first-child .mtile-title { font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem); }

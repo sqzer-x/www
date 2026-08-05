@@ -28,24 +28,32 @@ url    = "/projects/sqzass/"
 cover  = ""
 mark   = "images/projects/sqzass.png"
 accent = "#e0a06a"
+repo   = "https://github.com/sqzer-x/sqzass"
+stars  = 0
 
 [[extra.mosaic]]
 url    = "/projects/ommp/"
 cover  = "images/projects/ommp-cover.png"
 mark   = ""
 accent = "#7fc0d4"
+repo   = "https://github.com/sqzer-x/ommp"
+stars  = 0
 
 [[extra.mosaic]]
 url    = "/projects/uaf/"
 cover  = ""
 mark   = ""
 accent = "#9aa6cc"
+repo   = "https://github.com/sqzer-x/uaf"
+stars  = 0
 
 [[extra.mosaic]]
 url    = "/projects/usfx/"
 cover  = ""
 mark   = ""
 accent = "#8fb9a2"
+repo   = "https://github.com/sqzer-x/usfx"
+stars  = 1
 
 [[extra.preview]]
 url    = "/posts/a-new-beginning/"

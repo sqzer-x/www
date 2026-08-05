@@ -23,7 +23,9 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PROJECTS = ROOT / "content" / "projects"
+# content/ 전체를 훑는다. 별 개수는 프로젝트 상세 페이지에도 있고 홈의 모자이크
+# 카탈로그에도 있는데, 후자를 빼 두면 홈의 숫자만 조용히 낡는다.
+CONTENT = ROOT / "content"
 
 # `repo<공백>= "https://github.com/owner/name"` — 뒤따르는 stars 줄까지 함께 잡아
 # 갈아 끼운다. 없으면 새로 붙인다.
@@ -59,8 +61,8 @@ def fetch(slug: str) -> int | None:
 
 def check() -> int:
     bad = [
-        f"{p.name} ({m.group('slug')})"
-        for p in sorted(PROJECTS.glob("*.md"))
+        f"{p.relative_to(ROOT)} ({m.group('slug')})"
+        for p in sorted(CONTENT.rglob("*.md"))
         for m in LINE.finditer(p.read_text(encoding="utf-8"))
         if not m.group("old")
     ]
@@ -76,7 +78,7 @@ def main() -> int:
     cache: dict[str, int | None] = {}
     changed = 0
 
-    for path in sorted(PROJECTS.glob("*.md")):
+    for path in sorted(CONTENT.rglob("*.md")):
         text = path.read_text(encoding="utf-8")
 
         def swap(m: re.Match) -> str:

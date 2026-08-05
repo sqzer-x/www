@@ -108,6 +108,10 @@
         {%- if p.description %}
         <span class="mtile-blurb">{{ p.description }}</span>
         {%- endif %}
+        {#- 별 개수는 stars.py 가 카탈로그에 구워 둔 값이다. 0 이어도 낸다. #}
+        {%- if m.repo %}
+        <span class="mtile-stars stars">{{ m.stars }} ★</span>
+        {%- endif %}
       </span>
     </a>
     {%- endif %}
