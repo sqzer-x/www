@@ -28,18 +28,6 @@
 {%- for s in site.sections %}
 {%- if s.url == home ~ "posts/" and s.pages %}
 <section class="room wrap">
-  {#- 갈래 이름과 그 갈래로 가는 문이 한 줄에 선다. 사이의 헤어라인이 둘을
-      같은 줄의 양끝으로 묶는다 — 이름은 왼쪽에서 시작하고 문은 오른쪽 끝에서
-      기다린다. 전에는 이름이 가운데 위에, 문이 가운데 아래에 따로 서서 한
-      갈래의 머리와 꼬리가 166px 떨어져 있었다.
-      아래 내용(카드의 라벨, 원장의 행)이 전부 왼쪽 정렬이므로, 가운데 서 있던
-      것은 오히려 머리 쪽이었다. #}
-  <header class="room-head">
-    <h2>{{ t("writing") }}</h2>
-    <span class="room-rule" aria-hidden="true"></span>
-    <a class="room-door" href="{{ s.url }}">{{ t("all_posts") }}</a>
-  </header>
-
   {%- for p in s.pages %}
   {%- if loop.first %}
   <a class="feature" href="{{ p.url }}">
@@ -70,7 +58,21 @@
   {%- endif %}
   {%- endfor %}
 
-  {{ ledger(s.pages, 4, false, 1, page.language) }}
+  {#- 갈래 이름과 그 갈래로 가는 문이 한 줄에 선다. 사이의 헤어라인이 둘을 같은
+      줄의 양끝으로 묶는다.
+
+      맨 위 글이 이 줄보다 **앞에** 온다. 그 한 편은 갈래의 목록이 아니라 지금
+      내놓는 것이고, 머리는 그 뒤에 이어지는 목록의 머리다. 카드를 머리 아래
+      첫 항목으로 두면 "Writing 의 첫 줄"로 읽히는데, 크기가 다른 첫 줄이다. #}
+  <header class="room-head">
+    <h2>{{ t("writing") }}</h2>
+    <span class="room-rule" aria-hidden="true"></span>
+    <a class="room-door" href="{{ s.url }}">{{ t("all_posts") }}</a>
+  </header>
+
+  {#- 맨 위 한 편은 위에서 카드로 냈으므로 건너뛴다. 최대 세 줄 — 그 이상은
+      Posts 페이지가 받는다. #}
+  {{ ledger(s.pages, 3, false, 1, page.language) }}
 </section>
 {%- endif %}
 {%- endfor %}
