@@ -23,6 +23,7 @@ nav_projects = "Projects"
 nav_about    = "About"
 
 all_posts    = "All posts"
+read_post    = "Read post"
 all_projects = "All projects"
 writing      = "Writing"
 recent       = "Recent"

@@ -27,7 +27,7 @@
     뿐이라 두 곳을 따로 관리하지 않는다. #}
 {%- for s in site.sections %}
 {%- if s.url == home ~ "posts/" and s.pages %}
-<section class="room wrap wrap-ledger">
+<section class="room wrap">
   <div class="room-head"><h2>{{ t("writing") }}</h2></div>
 
   {%- for p in s.pages %}
@@ -52,6 +52,9 @@
       {%- if p.description %}
       <p class="feature-desc">{{ p.description }}</p>
       {%- endif %}
+      {#- 네 번째 줄. 카드가 링크라는 건 커서가 알려 주지만, 글 덩이에 아래 끝이
+          있어야 라벨이 반쪽 안에 떠 있지 않고 앉는다. #}
+      <span class="feature-cta">{{ t("read_post") }}</span>
     </div>
   </a>
   {%- endif %}
