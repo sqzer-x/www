@@ -1202,12 +1202,11 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
        길이가 제각각인 세 구절이 빈 자리에 흩어져 목록으로 안 보인다. */
     text-align: right;
     /* 두 줄까지. 칸의 아래끝 2.2rem 이 정확히 두 줄 높이라, 넘치면 옆 칸을
-       침범한다.
+       침범한다. -webkit-line-clamp 를 쓰지 않는 이유는 카드 제목과 같다 — 이
+       조합에서 display 가 flow-root 로 계산돼 clamp 가 죽고 overflow 만 남으면,
+       상자가 line-height 만큼이라 글자 줄상자(1.44em)의 아래가 잘린다.
        ponytail: 여기 걸리는 제목이 잦아지면 breakpoint 를 84rem 으로 올려 이름
        열을 넓히는 쪽이 먼저다. 글자 크기를 줄이는 건 그다음. */
-    /* 두 줄까지. -webkit-line-clamp 를 쓰지 않는 이유는 카드 제목과 같다 — 이
-       조합에서 display 가 flow-root 로 계산돼 clamp 가 죽고 overflow 만 남으면,
-       상자가 line-height 만큼이라 글자 줄상자(1.44em)의 아래가 잘린다. */
     max-height: calc(2 * 1.35em + 0.12em);
     padding-bottom: 0.12em;
     overflow: hidden;
