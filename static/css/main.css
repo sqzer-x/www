@@ -732,41 +732,73 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
   .ledger-link { grid-template-columns: 1fr; gap: 0.5rem; padding-inline: 0; margin-inline: 0; }
 }
 
-/* 홈의 맨 위 글 — 액자와 같은 문법, 더 크게. */
-.feature { display: block; position: relative; text-align: center; }
+/* 홈의 맨 위 글. 그림과 이름표가 테두리 하나 안에 같이 있다 — 미술관 라벨과
+   작품의 관계다. 전에는 그림을 가운데 세우고 글을 그 아래 따로 세웠는데, 폭도
+   정렬도 달라서 두 물건으로 읽혔다.
 
-/* 미리보기. /projects/ 의 액자와 같은 어법이다 — 테두리는 그림에만 있고 글은
-   그 아래 뜬다. 손이 닿으면 안에서 돌아간다: 상자는 자리도 크기도 안 바꾸고
-   움직이는 것은 그림 안쪽뿐이라, 호버에 레이아웃이 움직이지 않는다는 이 집의
-   규칙은 그대로다.
-   poster 는 영상의 첫 프레임이다. 재생이 시작될 때도, 손을 떼고 되감을 때도
-   같은 그림이라 이음매가 없다. */
-.feature-media {
-  display: block;
-  /* height:auto 가 없으면 <video> 의 height 속성이 그대로 쓰여 540px 로 서고
-     aspect-ratio 가 지나간다. 속성은 남긴다 — 그게 있어야 파일이 도착하기 전에도
-     자리가 잡혀서 글이 밀리지 않는다. */
-  width: 100%; height: auto; max-width: 36rem;
-  margin: 0 auto clamp(1.25rem, 3vw, 1.75rem);
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+   /projects/ 의 액자는 테두리를 그림에만 두르고 캡션을 아래에 띄운다. 그건 여러
+   점이 나란히 걸릴 때의 문법이고, 여기는 한 점뿐이라 라벨이 붙어 있어야 한 작품이
+   된다.
+
+   호버는 색만 바꾼다: 테두리가 한 단, 날짜가 액센트로, 제목이 잉크로. 원장의
+   행과 같은 응답이다. */
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
+  overflow: hidden;
   background: var(--bg-2);
+  text-align: left;
+  transition: border-color var(--tr-ink);
+}
+.feature:hover { border-color: var(--rule-2); }
+/* 미리보기가 없는 글은 한 칸이다. 빈 칸을 남기면 그 글만 뭔가 빠진 것처럼 보인다. */
+.feature:not(:has(.feature-media)) { grid-template-columns: 1fr; }
+
+/* 그림은 자기 칸을 채운다. 높이는 이름표가 정하고 그림이 거기에 맞춰 잘린다 —
+   16:9 를 고정하면 제목이 길어질 때 두 칸의 키가 어긋난다.
+   손이 닿으면 안에서 돌아간다. 상자는 자리도 크기도 안 바꾸므로, 호버에
+   레이아웃이 움직이지 않는다는 규칙은 그대로다.
+   poster 는 영상의 첫 프레임이다. 시작할 때도 되감을 때도 같은 그림이라 이음매가
+   없다. */
+.feature-media {
+  display: block; margin: 0;
+  width: 100%; height: 100%;
+  min-height: clamp(11rem, 20vw, 15rem);
+  object-fit: cover;
+  border-right: 1px solid var(--rule);
+  background: var(--bg-3);
+}
+
+.feature-label {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 0.6rem; min-width: 0;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
 }
 .feature-date {
   font-family: var(--mono); font-size: 0.7rem;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4);
-  transition: color var(--tr-ink);
+  letter-spacing: 0.14em; font-variant-numeric: tabular-nums;
+  color: var(--ink-4); transition: color var(--tr-ink);
 }
 .feature:hover .feature-date { color: var(--accent); }
 .feature-title {
-  margin: 0.8rem auto 0; max-width: 22ch;
-  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem);
-  font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.18;
-  transition: color var(--tr-ink); text-wrap: balance;
+  margin: 0;
+  font-size: clamp(1.25rem, 1.05rem + 0.85vw, 1.75rem);
+  font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.2;
+  color: var(--ink-2); transition: color var(--tr-ink); text-wrap: balance;
 }
-.feature-desc { margin: 0.7rem auto 0; max-width: 46ch; color: var(--ink-3); }
+.feature:hover .feature-title { color: var(--ink); }
+.feature-desc { margin: 0; max-width: 38ch; font-size: 0.92rem; color: var(--ink-3); text-wrap: pretty; }
+
+/* 좁아지면 그림이 위로 올라간다. 옆으로 두면 두 칸 다 못 쓸 만큼 좁아진다. */
+@media (max-width: 46rem) {
+  .feature { grid-template-columns: 1fr; }
+  .feature-media {
+    min-height: 0; aspect-ratio: 16 / 9;
+    border-right: 0; border-bottom: 1px solid var(--rule);
+  }
+}
 
 /* ---------- buttons ---------- */
 

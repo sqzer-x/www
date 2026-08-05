@@ -42,13 +42,17 @@
            aria-hidden="true" tabindex="-1"></video>
     {%- endif %}
     {%- endfor %}
-    {%- if p.date %}
-    <time class="feature-date" datetime="{{ p.date.date }}">{{ p.date.year }}</time>
-    {%- endif %}
-    <h3 class="feature-title">{{ p.title }}</h3>
-    {%- if p.description %}
-    <p class="feature-desc">{{ p.description }}</p>
-    {%- endif %}
+    {#- 이름표. 액자 안에서 그림 옆에 붙는다 — 미술관에서 작품에 딸린 라벨과
+        같은 관계라, 따로 떼면 둘이 다른 물건이 된다. #}
+    <div class="feature-label">
+      {%- if p.date %}
+      <time class="feature-date" datetime="{{ p.date.date }}">{{ p.date.year }}.{% if p.date.month < 10 %}0{% endif %}{{ p.date.month }}.{% if p.date.day < 10 %}0{% endif %}{{ p.date.day }}</time>
+      {%- endif %}
+      <h3 class="feature-title">{{ p.title }}</h3>
+      {%- if p.description %}
+      <p class="feature-desc">{{ p.description }}</p>
+      {%- endif %}
+    </div>
   </a>
   {%- endif %}
   {%- endfor %}
