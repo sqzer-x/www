@@ -747,7 +747,7 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
    행과 같은 응답이다. */
 .feature {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
   overflow: hidden;
@@ -771,6 +771,14 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
      비율이 그대로 행 높이의 바닥이 되고, 라벨이 더 길면 라벨이 이긴다. 예전의
      clamp 는 어느 폭에서도 이 값을 넘지 못해서 아무 일도 하지 않았다. */
   width: 100%; height: 100%;
+  /* 16:10 은 이 사이트의 그림 비율이다 — /projects/ 의 .frame-media 가 같은 값을
+     쓴다. 이 카드만 <video> 의 width/height 속성이 주는 16:9 를 그대로 행 높이로
+     써서, 카드가 3.09:1 로 납작했다(참조는 2.66:1). CSS 비율이 내재 비율을
+     덮으므로 행은 이제 max(이름표의 자연 높이, 그림 폭 ÷ 1.6) 이고, 제목이
+     길어지면 이름표가 이긴다.
+     좌우가 잘리는데 이 포스터는 만다라도 인물도 가운데 있어서 잘려 나가는 것은
+     배경이다. 반대로 납작하게 두면 세로가 잘리고, 그때 잘리는 것은 머리다. */
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   border-right: 1px solid var(--rule);
   background: var(--bg-3);
@@ -791,7 +799,12 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 .feature:hover .feature-date { color: var(--accent); }
 .feature-title {
   margin: 0;
-  font-size: clamp(1.4rem, 1.15rem + 1.35vw, 2.35rem);
+  /* 1440 에서 49.4px. 이 폭에서 이름표의 측정폭은 402px 이고 지금 제목이 396px 을
+     차지한다 — 제목이 자기 열을 꽉 채우는 것이 참조 카드가 헤드라인처럼 읽히는
+     이유이고(그쪽은 353 중 353), 그 성질을 숫자로 맞춘 값이다.
+     더 키우면 두 줄이 되는데, 15자짜리 제목이 꺾이는 건 억지로 보인다. 제목이
+     길어지면 알아서 꺾이고 그때는 카드가 같이 자란다. */
+  font-size: clamp(1.5rem, 1.15rem + 1.95vw, 2.6rem);
   font-weight: var(--w-section); letter-spacing: var(--track-air); line-height: 1.2;
   color: var(--ink-2); transition: color var(--tr-ink);
   /* 이 시트의 모든 제목이 balance 다. 한때 여기만 pretty 로 바꿔 두고 "balance 는
