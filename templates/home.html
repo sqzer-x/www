@@ -88,14 +88,30 @@
     <span class="room-rule" aria-hidden="true"></span>
     <a class="room-door" href="{{ s.url }}">{{ t("all_projects") }}</a>
   </header>
-  <div class="tiles">
+  {#- 모자이크. 첫 장이 크고 나머지 셋이 옆에 쌓인다 — 대칭 격자는 여섯 개가
+      다 같은 무게라고 말하는데, 갈래에는 앞에 세울 것이 있다.
+      그림은 카탈로그가 준다. 목록은 이름과 설명만 준다. #}
+  <div class="mosaic">
+    {%- for m in page.extra.mosaic %}
     {%- for p in s.pages %}
-    <article class="tile">
-      <h3 class="tile-title"><a class="tile-link" href="{{ p.url }}">{{ p.title }}</a></h3>
-      {%- if p.description %}
-      <p class="tile-blurb">{{ p.description }}</p>
-      {%- endif %}
-    </article>
+    {%- if p.url == m.url %}
+    <a class="mtile" href="{{ p.url }}" style="--tint: {{ m.accent }}">
+      <span class="mtile-art" aria-hidden="true">
+        {%- if m.cover %}
+        <img src="{{ asset(m.cover) }}" alt="" loading="lazy" decoding="async">
+        {%- elif m.mark %}
+        <span class="mtile-mark" style="--mark-src: url('/{{ m.mark }}')"></span>
+        {%- endif %}
+      </span>
+      <span class="mtile-body">
+        <span class="mtile-title">{{ p.title }}</span>
+        {%- if p.description %}
+        <span class="mtile-blurb">{{ p.description }}</span>
+        {%- endif %}
+      </span>
+    </a>
+    {%- endif %}
+    {%- endfor %}
     {%- endfor %}
   </div>
 </section>

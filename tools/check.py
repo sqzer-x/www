@@ -75,7 +75,7 @@ def check_projects():
 
 
 def check_preview():
-    """홈의 미리보기 카탈로그가 실제 글을 가리키는지.
+    """홈의 미리보기·모자이크 카탈로그가 실제 페이지와 파일을 가리키는지.
 
     이것도 [extra] 라 생성기가 안 읽는다. url 이 어긋나면 에러가 아니라 그냥
     미리보기가 안 나오고, 그건 배포된 뒤에야 눈으로만 보인다.
@@ -84,7 +84,17 @@ def check_preview():
         index = ROOT / "content" / ("_index.ko.md" if lang == "ko" else "_index.md")
         if not index.exists():
             continue  # 그 언어에 첫 화면이 없을 수 있다. 한국어가 그렇다.
-        for item in front_matter(index).get("extra", {}).get("preview", []):
+        extra = front_matter(index).get("extra", {})
+        for item in extra.get("mosaic", []):
+            slug = item["url"].rstrip("/").rsplit("/", 1)[-1]
+            suffix = ".ko.md" if lang == "ko" else ".md"
+            if not (ROOT / "content" / "projects" / f"{slug}{suffix}").exists():
+                fails.append(f"[{lang}] 모자이크가 가리키는 프로젝트가 없습니다: {item['url']}")
+            for key in ("cover", "mark"):
+                if item[key] and not (ROOT / "static" / item[key]).exists():
+                    fails.append(f"[{lang}] 모자이크 {key} 파일이 없습니다: {item[key]}")
+
+        for item in extra.get("preview", []):
             url = item["url"]
             slug = url.rstrip("/").rsplit("/", 1)[-1]
             suffix = ".ko.md" if lang == "ko" else ".md"

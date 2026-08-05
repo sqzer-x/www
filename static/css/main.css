@@ -705,6 +705,87 @@ html[lang="ko"] [data-tooltip]::after { letter-spacing: 0; text-transform: none;
 }
 .stars { font-variant-numeric: tabular-nums; }
 
+/* ---------- project mosaic ---------- */
+
+/* 첫 장이 크고 나머지 셋이 옆에 쌓인다. 대칭 격자는 여섯 개가 다 같은 무게라고
+   말하는데, 갈래에는 앞에 세울 것이 있다.
+
+   그림이 있는 프로젝트는 둘뿐이다. 없는 것은 자기 색으로 선다 — 프로젝트마다
+   이미 색이 하나씩 정해져 있고(상세 페이지의 --accent 와 같은 값), 그 색이
+   "그림 없음" 판보다 그 프로젝트에 대해 더 많이 말한다. 그림이 생기면 카탈로그의
+   cover 한 줄로 들어온다. */
+.mosaic {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+}
+/* 첫 장이 왼쪽 열을 통째로 쓴다. :first-child 라 개수가 넷이 아니어도 안 깨진다. */
+.mosaic > :first-child { grid-row: 1 / -1; }
+
+.mtile {
+  position: relative; display: flex; align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--bg-2);
+  transition: border-color var(--tr-ink);
+}
+.mtile:hover { border-color: var(--rule-2); }
+/* 작은 장의 키를 여기서 정한다. 큰 장은 셋의 합만큼 자라므로 자기 비율이 없다. */
+.mosaic > :not(:first-child) { aspect-ratio: 2.1 / 1; }
+
+/* 바탕. 그림이 있으면 그림이, 없으면 그 프로젝트의 색이 옅게 깔린다. */
+.mtile-art {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--tint) 30%, var(--bg-2));
+}
+.mtile-art img { width: 100%; height: 100%; object-fit: cover; }
+/* 마크는 잉크가 아니라 그 프로젝트의 색을 진하게 쓴 것이다 — 바탕과 같은 색의
+   두 단이라 한 물건으로 읽힌다. */
+.mtile-mark {
+  width: 42%; aspect-ratio: 1;
+  background-color: color-mix(in srgb, var(--tint) 62%, var(--ink));
+  -webkit-mask: var(--mark-src) center / contain no-repeat;
+  mask: var(--mark-src) center / contain no-repeat;
+}
+
+/* 글은 바닥에 앉고, 그 아래에서 바탕색이 올라와 그림을 덮는다. 밝은 테마에서는
+   밝은 장막이고 어두운 테마에서는 어두운 장막이라, 글은 두 테마 모두에서 --ink
+   한 색으로 읽힌다. 참조 사이트는 다크 전용이라 흰 글자 한 벌로 끝난다. */
+.mtile-body {
+  position: relative; z-index: 1; width: 100%;
+  display: flex; flex-direction: column; gap: 0.3rem;
+  padding: clamp(1rem, 2.4vw, 1.6rem);
+  /* 글이 앉는 띠는 바탕색으로 꽉 차 있고 그 위에서 풀린다. 그라데이션이 글자
+     높이 안에서 투명해지면 밝은 그림 위의 밝은 글자가 되는데, ommp 의 표지가
+     정확히 그랬다. 두 테마 모두 --bg 로 가므로 글은 --ink 한 색이면 된다. */
+  background: linear-gradient(to top,
+    var(--bg) 0%,
+    var(--bg) 42%,
+    color-mix(in srgb, var(--bg) 72%, transparent) 72%,
+    transparent 100%);
+}
+.mtile-title {
+  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.35rem);
+  font-weight: var(--w-item); letter-spacing: var(--track-set);
+  color: var(--ink);
+}
+.mtile-blurb {
+  max-width: 44ch; font-size: 0.88rem; line-height: 1.5;
+  color: var(--ink-2); text-wrap: pretty;
+}
+/* 큰 장은 글도 한 단 크다 — 크기가 순서를 말한다. */
+.mosaic > :first-child .mtile-title { font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem); }
+
+/* 좁아지면 한 열로 쌓고 전부 같은 비율이 된다. 두 열로 두면 작은 장이 글을
+   담기에 좁아진다. */
+@media (max-width: 46rem) {
+  .mosaic { grid-template-columns: 1fr; grid-template-rows: none; }
+  .mosaic > :first-child { grid-row: auto; }
+  .mosaic > * { aspect-ratio: 2 / 1; }
+}
+
 /* ---------- ledger ---------- */
 
 .ledger { list-style: none; margin: 0; padding: 0; }
