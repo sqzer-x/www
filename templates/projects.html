@@ -67,7 +67,10 @@
       분류가 곧 저자의 편집 결정이 된다. #}
   {%- for g in page.extra.group %}
   <section id="{{ g.id }}">
-    <div class="room-head"><h2>{{ g.label }}</h2></div>
+    <header class="room-head">
+      <h2>{{ g.label }}</h2>
+      <span class="room-rule" aria-hidden="true"></span>
+    </header>
     {%- if g.note %}
     <p class="room-head-sub">{{ g.note }}</p>
     {%- endif %}
