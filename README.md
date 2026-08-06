@@ -5,6 +5,8 @@ Personal site — projects, technical posts, and an about page. English and Kore
 Built with [sqzass](https://github.com/sqzer-x/sqzass), deployed to GitHub Pages.
 No bundler, no package manager, no `node_modules`.
 
+작업 기록과 뒤집힌 결정은 [`WORKLOG.md`](WORKLOG.md)에 있습니다.
+
 ## Working on it
 
 ```bash
