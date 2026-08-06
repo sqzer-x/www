@@ -89,7 +89,10 @@ def main() -> int:
             if n is None:
                 return m.group(0)  # 못 가져오면 있던 값을 지우지 않는다
             keep = m.group(0)[: m.start("old") - m.start()] if m.group("old") else m.group(0)
-            return f'{keep}\n{m.group("indent")}stars{m.group("pad")}= {n}'
+            # `stars` 가 `repo` 보다 한 글자 길다. 여백을 그대로 베끼면 = 열이
+            # 한 칸 밀린다 — 이 카탈로그들은 = 를 맞춰 적는 손글씨 TOML 이다.
+            pad = m.group("pad")
+            return f'{keep}\n{m.group("indent")}stars{pad[1:] or " "}= {n}'
 
         new = LINE.sub(swap, text)
         if new != text:

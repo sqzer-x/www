@@ -28,7 +28,7 @@ cover = ""
 blurb = "A static site generator that refuses to publish a broken reference."
 site  = "https://sqzass.sqzer.com"
 repo  = "https://github.com/sqzer-x/sqzass"
-stars  = 0
+stars = 0
 
 [[extra.featured]]
 url   = "/projects/ommp/"
@@ -39,7 +39,7 @@ cover = "images/projects/ommp-cover.png"
 blurb = "A terminal music player with no daemon to start and nothing left running."
 site  = "https://ommp.sqzer.com"
 repo  = "https://github.com/sqzer-x/ommp"
-stars  = 0
+stars = 0
 
 [[extra.group]]
 id = "security"

@@ -20,7 +20,7 @@ cover = ""
 blurb = "깨진 참조를 발행하지 않는 정적 사이트 생성기."
 site  = "https://sqzass.sqzer.com"
 repo  = "https://github.com/sqzer-x/sqzass"
-stars  = 0
+stars = 0
 
 [[extra.featured]]
 url   = "/ko/projects/ommp/"
@@ -31,7 +31,7 @@ cover = "images/projects/ommp-cover.png"
 blurb = "띄워 둘 데몬도, 끄고 남는 것도 없는 터미널 음악 재생기."
 site  = "https://ommp.sqzer.com"
 repo  = "https://github.com/sqzer-x/ommp"
-stars  = 0
+stars = 0
 
 [[extra.group]]
 id = "security"
